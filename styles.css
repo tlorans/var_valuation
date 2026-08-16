@@ -795,6 +795,59 @@ input[type="range"]::-moz-range-thumb {
   color: var(--ink-500);
 }
 
+/* ---------- Subheads inside steps ---------- */
+
+.subhead {
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 40px 0 12px;
+}
+.step > p + .subhead, .step .note + .subhead { margin-top: 32px; }
+
+/* ---------- Estimation pipeline ---------- */
+
+.pipeline {
+  list-style: none;
+  margin: 28px 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.pipeline li { position: relative; }
+.pipeline__stage {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 16px;
+  padding: 16px 0;
+  border-top: 1px solid var(--gray-100);
+}
+.pipeline li:first-child .pipeline__stage { border-top: none; padding-top: 4px; }
+.pipeline__num {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-400);
+  padding-top: 3px;
+}
+.pipeline__stage h3 {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 6px;
+  color: var(--ink);
+}
+.pipeline__stage p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-600);
+  margin: 0;
+}
+.pipeline__stage p strong { color: var(--ink); font-weight: 600; }
+.pipeline__stage p .katex { font-size: 0.95em; }
+
 /* ---------- Footer ---------- */
 
 .footer {

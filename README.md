@@ -9,17 +9,25 @@ calibration playground. Enriched against the two reference PDFs in this repo:
 - `valuations-model.pdf` — Ang & Liu (2001), "A General Affine Earnings Valuation
   Model," *Review of Accounting Studies* 6, 397–425
 
-## Course structure (10 steps)
+## Course structure (11 steps)
 
 - **00–06** — the original derivation: Damodaran benchmark → definition of value →
   growth form → VAR → lognormal step → closed-form solution → Gordon as degenerate case
+- **03** — expanded: why one joint model (value is the expectation of a product, so the
+  joint distribution is the minimum required), what a VAR concretely is (a system of
+  simultaneous regressions, with the 2×2 case written out), recursive forecasting, and
+  the four requirements a VAR uniquely meets (jointness, mean reversion, testable
+  predictability, Gaussian closed-form)
 - **07** — spot discount rates μt(n): the paper's practical bridge that keeps the
   two-step (forecast, then discount) workflow while replacing the single WACC with a curve
-- **08** — what the paper finds: the December 2000 upward-sloping discount curve, the
-  perpetuity mis-pricing table (−15.3% mean B/M error, −57.9% worst industry), and the
-  horizon-dependent variance decomposition (premium dominates short horizons, persistent
-  components dominate long ones), with a stylized Figure-4 reproduction
-- **09** — the 2001 companion: residual income + pricing kernel, Corollary 2.2 (a
+- **08** — estimation: the five-stage empirical pipeline from raw data to a priced
+  discount curve (observables → rolling betas → risk-premium regression → VAR →
+  recursions), the division of labor between standard tools, and what can go wrong
+- **09** — what the paper finds: the December 2000 upward-sloping discount curve, the
+  perpetuity mis-pricing table (−15.3% mean B/M error, −57.9% worst industry), the
+  horizon-dependent variance decomposition, and why the approach turns price-watching
+  into price-explaining (each valuation narrative becomes a measured object)
+- **10** — the 2001 companion: residual income + pricing kernel, Corollary 2.2 (a
   constant discount factor is not always possible even with constant rates), affine
   goodwill, P/B comparative statics, and the Jensen-vs-risk-aversion sign result
 

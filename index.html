@@ -43,7 +43,7 @@
     <!-- ============ HERO ============ -->
     <section class="hero">
       <div class="hero__inner">
-        <p class="eyebrow eyebrow--blue">Finance · Valuation · A course in ten steps</p>
+        <p class="eyebrow eyebrow--blue">Finance · Valuation · A course in eleven steps</p>
         <h1 class="hero__title">How to discount cash flows when expected returns move</h1>
         <p class="hero__sub">
           Ang &amp; Liu (2004), equation by equation — with its 2001 affine companion and the paper's
@@ -64,13 +64,14 @@
           <li><a href="#step-0"><span class="syllabus__num">00</span><span class="syllabus__name">The benchmark you already know</span><span class="syllabus__tag">Damodaran DCF</span></a></li>
           <li><a href="#step-1"><span class="syllabus__num">01</span><span class="syllabus__name">The correct definition of value</span><span class="syllabus__tag">Eq. (1)</span></a></li>
           <li><a href="#step-2"><span class="syllabus__num">02</span><span class="syllabus__name">Cash flows in growth form</span><span class="syllabus__tag">Eq. (2)</span></a></li>
-          <li><a href="#step-3"><span class="syllabus__num">03</span><span class="syllabus__name">The VAR: where dynamics enter</span><span class="syllabus__tag">Eqs. (3)–(5)</span></a></li>
+          <li><a href="#step-3"><span class="syllabus__num">03</span><span class="syllabus__name">The VAR: what it is, why it works</span><span class="syllabus__tag">Eqs. (3)–(5)</span></a></li>
           <li><a href="#step-4"><span class="syllabus__num">04</span><span class="syllabus__name">The lognormal step</span><span class="syllabus__tag">Eqs. (6)–(7)</span></a></li>
           <li><a href="#step-5"><span class="syllabus__num">05</span><span class="syllabus__name">The closed-form solution</span><span class="syllabus__tag">Eqs. (8)–(10)</span></a></li>
           <li><a href="#step-6"><span class="syllabus__num">06</span><span class="syllabus__name">What replaces the terminal value</span><span class="syllabus__tag">Gordon as a special case</span></a></li>
           <li><a href="#step-7"><span class="syllabus__num">07</span><span class="syllabus__name">Spot discount rates: the practical bridge</span><span class="syllabus__tag">The paper's core output</span></a></li>
-          <li><a href="#step-8"><span class="syllabus__num">08</span><span class="syllabus__name">What the paper actually finds</span><span class="syllabus__tag">December 2000 calibration</span></a></li>
-          <li><a href="#step-9"><span class="syllabus__num">09</span><span class="syllabus__name">The 2001 companion: earnings and book value</span><span class="syllabus__tag">Ang–Liu (2001)</span></a></li>
+          <li><a href="#step-8"><span class="syllabus__num">08</span><span class="syllabus__name">From theory to numbers: estimation</span><span class="syllabus__tag">The empirical pipeline</span></a></li>
+          <li><a href="#step-9"><span class="syllabus__num">09</span><span class="syllabus__name">What the paper actually finds</span><span class="syllabus__tag">December 2000 calibration</span></a></li>
+          <li><a href="#step-10"><span class="syllabus__num">10</span><span class="syllabus__name">The 2001 companion: earnings and book value</span><span class="syllabus__tag">Ang–Liu (2001)</span></a></li>
         </ol>
       </div>
     </section>
@@ -82,13 +83,14 @@
           <a href="#step-0"><span>00</span>The benchmark you already know</a>
           <a href="#step-1"><span>01</span>The correct definition of value</a>
           <a href="#step-2"><span>02</span>Cash flows in growth form</a>
-          <a href="#step-3"><span>03</span>The VAR: where dynamics enter</a>
+          <a href="#step-3"><span>03</span>The VAR: what it is, why it works</a>
           <a href="#step-4"><span>04</span>The lognormal step</a>
           <a href="#step-5"><span>05</span>The closed-form solution</a>
           <a href="#step-6"><span>06</span>What replaces the terminal value</a>
           <a href="#step-7"><span>07</span>Spot discount rates</a>
-          <a href="#step-8"><span>08</span>What the paper finds</a>
-          <a href="#step-9"><span>09</span>The 2001 companion</a>
+          <a href="#step-8"><span>08</span>From theory to numbers</a>
+          <a href="#step-9"><span>09</span>What the paper finds</a>
+          <a href="#step-10"><span>10</span>The 2001 companion</a>
           <a href="#side-by-side">—</span>Side by side</a>
           <a href="#changes">—</span>Three things that concretely change</a>
           <a href="#caveat">—</span>The honest caveat</a>
@@ -190,14 +192,77 @@
         <section class="step" id="step-3">
           <header class="step__header">
             <p class="eyebrow">Step 03 · Dynamics</p>
-            <h2>The VAR: where dynamics enter</h2>
+            <h2>The VAR: what it is, and why it is the right tool</h2>
           </header>
+
+          <div class="punchline">
+            <p class="punchline__eyebrow">Why one model for both cash flows and expected returns?</p>
+            <p class="punchline__text">
+              Value is the expectation of a <em>product</em> — cash flow times discount factor. The
+              expectation of a product depends on the joint distribution, not on each piece
+              separately. If you forecast cash flows in one model and expected returns in another,
+              you have no covariance term, no consistent horizon dynamics, and the two forecasts
+              can even contradict each other. Step 04 will make the covariance term precise:
+              $-2\,\mathrm{Cov}(\sum g, \sum r)$ sits inside the price itself. A single model that
+              generates <em>both</em> series jointly is not elegance — it is the minimum required to
+              price the product correctly.
+            </p>
+          </div>
+
           <p>
-            Collect the state variables in $X_t$. In the paper's empirical implementation the vector
-            is six-dimensional, $X_t = (g_t,\ \beta_t,\ \Delta po_t,\ r_t,\ cay_t,\ \pi_t)'$ — dividend
-            growth, the time-varying beta, the change in the payout ratio (its earnings-growth
-            proxy), the nominal short rate, Lettau–Ludvigson $cay$, and inflation. Assume a Gaussian
-            VAR(1):
+            So we need one statistical engine that describes how cash flow growth $g_t$ and
+            expected returns $r_t$ move, forecast each other, revert, and co-move. The paper's
+            choice is a <strong>vector autoregression</strong>.
+          </p>
+
+          <h3 class="subhead">What, concretely, is a VAR?</h3>
+          <p>
+            A VAR is just a system of ordinary linear regressions run <em>simultaneously</em>.
+            Take the variables you care about, stack them into a vector, and regress each one on
+            <em>all</em> of them, lagged one period. With two variables, $x$ and $y$, a VAR(1) is
+            literally two regressions:
+          </p>
+          <div class="eq">
+            <div class="eq__body">$$x_{t+1} = a_1 + b_{11} x_t + b_{12} y_t + u_{t+1} \qquad\qquad y_{t+1} = a_2 + b_{21} x_t + b_{22} y_t + v_{t+1}$$</div>
+            <span class="eq__tag" aria-hidden="true">(3a)</span>
+          </div>
+          <p>
+            "Symmetric" treatment: nothing is labeled a cause or an effect. $y$ can forecast $x$
+            ($b_{12} \neq 0$) and $x$ can forecast $y$ ($b_{21} \neq 0$). Writing the pair as a
+            vector gives the compact form the paper uses — with the state vector stacked and the
+            coefficients gathered into matrices:
+          </p>
+          <div class="eq">
+            <div class="eq__body">$$\underbrace{\begin{pmatrix} x_{t+1} \\ y_{t+1} \end{pmatrix}}_{X_{t+1}} = \underbrace{\begin{pmatrix} a_1 \\ a_2 \end{pmatrix}}_{\mu} + \underbrace{\begin{pmatrix} b_{11} & b_{12} \\ b_{21} & b_{22} \end{pmatrix}}_{\Phi} \begin{pmatrix} x_t \\ y_t \end{pmatrix} + \underbrace{\begin{pmatrix} u_{t+1} \\ v_{t+1} \end{pmatrix}}_{\text{shocks}}$$</div>
+            <span class="eq__tag" aria-hidden="true">(3b)</span>
+          </div>
+          <p>
+            Three named objects, each with a job. <strong>$\mu$</strong> pulls everything toward
+            long-run averages. <strong>$\Phi$</strong> is the persistence matrix: its diagonal
+            says how much each variable remembers itself; its off-diagonals say which variables
+            forecast which. <strong>The shocks</strong> arrive every period, with a covariance
+            matrix $\Sigma\Sigma'$ whose off-diagonal entries say which variables get hit
+            together. Gaussian shocks + linear dynamics is what makes every future horizon
+            computable in closed form.
+          </p>
+          <div class="note">
+            <p class="note__label">Forecasting with a VAR is recursive bookkeeping</p>
+            <p>
+              One step ahead: $E_t[X_{t+1}] = \mu + \Phi X_t$. Two steps: plug the one-step
+              forecast back in, $E_t[X_{t+2}] = \mu + \Phi E_t[X_{t+1}] = (I + \Phi)\mu + \Phi^2 X_t$.
+              By $j$ steps, $E_t[X_{t+j}] = (I + \Phi + \dots + \Phi^{j-1})\mu + \Phi^j X_t$. Two
+              consequences: today's state dies out at the speed of $\Phi^j$ (the eigenvalues
+              govern everything), and the unconditional mean is $(I - \Phi)^{-1}\mu$. Every
+              "mean reversion" statement in this course is one of these two formulas read aloud.
+            </p>
+          </div>
+
+          <p>
+            In the paper's empirical implementation the vector is six-dimensional,
+            $X_t = (g_t,\ \beta_t,\ \Delta po_t,\ r_t,\ cay_t,\ \pi_t)'$ — dividend growth, the
+            time-varying beta, the change in the payout ratio (its earnings-growth proxy), the
+            nominal short rate, Lettau–Ludvigson $cay$, and inflation. The full model is the
+            six-variable version of (3b):
           </p>
           <div class="eq">
             <div class="eq__body">$$X_{t+1} = \mu + \Phi X_t + \Sigma \varepsilon_{t+1}, \qquad \varepsilon_{t+1} \sim N(0, I)$$</div>
@@ -220,7 +285,35 @@
               <em>expected</em>-return variation rather than realized-return noise.
             </p>
           </div>
-          <p>Three things this buys you:</p>
+
+          <h3 class="subhead">Why a VAR is the right solution here</h3>
+          <p>Four requirements, four matches:</p>
+          <div class="duo">
+            <div class="card card--tight">
+              <h3>1 · Jointness by construction</h3>
+              <p>One $\Sigma\Sigma'$ generates the shocks to cash flows <em>and</em> expected returns together. The covariance the price needs (Step 04) falls out of the estimate — it cannot be set to zero by accident, because there is nowhere to set it.</p>
+            </div>
+            <div class="card card--tight">
+              <h3>2 · Mean reversion for free</h3>
+              <p>A stable $\Phi$ (eigenvalues inside the unit circle) delivers $E_t[r_{t+j}]$ gliding back to $\bar r$ at a speed the data choose. The flat-forever discount rate is the special case $\Phi = 0$, $X$ frozen — Damodaran lives in that corner.</p>
+            </div>
+            <div class="card card--tight">
+              <h3>3 · Predictability is symmetric and testable</h3>
+              <p>Do short rates forecast dividend growth? Does $cay$ forecast betas? These are coefficients of $\Phi$, with standard errors. The dynamic relations are not assumed — they are estimated and can be rejected.</p>
+            </div>
+            <div class="card card--tight">
+              <h3>4 · Gaussian linearity makes the price closed-form</h3>
+              <p>Linear dynamics + normal shocks ⇒ every $\sum(g - r)$ over every horizon is conditionally normal ⇒ $E[\exp(\cdot)]$ is the two-line lognormal formula of Step 04. Change the distribution and you lose the analytic price — this is the load-bearing constraint.</p>
+            </div>
+          </div>
+          <p>
+            A natural worry: VAR(1) means one lag — is that restrictive? No: any VAR(p) can be
+            rewritten as a bigger VAR(1) using the companion form (stack the last $p$ values of
+            $X$ into a taller vector). The paper says exactly this. The honest constraint is not
+            the lag count but the <em>linearity + Gaussianity</em>, which buys the closed form at
+            the price of no stochastic volatility in the state dynamics.
+          </p>
+          <p>Three things this buys you, in one view:</p>
           <div class="trio">
             <div class="card card--tight">
               <h3>Mean reversion</h3>
@@ -433,7 +526,129 @@
         <!-- ============ STEP 8 ============ -->
         <section class="step" id="step-8">
           <header class="step__header">
-            <p class="eyebrow">Step 08 · The evidence</p>
+            <p class="eyebrow">Step 08 · Estimation</p>
+            <h2>From theory to numbers: how everything is estimated</h2>
+          </header>
+          <p>
+            The model is only useful if every object in it can be measured. It can. The paper's
+            pipeline runs from raw data to a priced discount curve in five stages — and the
+            remarkable fact is that <strong>nothing in it is exotic</strong>: every stage is a
+            first-year-graduate econometrics exercise.
+          </p>
+
+          <ol class="pipeline">
+            <li>
+              <div class="pipeline__stage">
+                <p class="pipeline__num">1</p>
+                <div>
+                  <h3>Build the observables</h3>
+                  <p>
+                    <strong>Cash flow growth $g_t$:</strong> for each portfolio, monthly dividends
+                    are backed out of the difference between returns with and without dividends,
+                    then summed over 12 months to remove seasonality; $g_t = \log(D_t/D_{t-1})$.
+                    <strong>Short rate $r_t$:</strong> the one-year zero-coupon rate.
+                    <strong>$cay_t$:</strong> Lettau–Ludvigson's consumption–wealth–labor deviation,
+                    re-estimated recursively using only data up to each $t$ — no look-ahead.
+                    <strong>$\pi_t$:</strong> year-on-year CPI inflation. <strong>Payout
+                    $\Delta po_t$:</strong> from COMPUSTAT annual dividends and earnings (firms
+                    with negative earnings excluded).
+                  </p>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="pipeline__stage">
+                <p class="pipeline__num">2</p>
+                <div>
+                  <h3>Estimate the time-varying betas</h3>
+                  <p>
+                    Rolling 60-month regressions of each portfolio's log excess return on the
+                    market's log excess return. The sloping coefficient in each window <em>is</em>
+                    $\beta_t$ — a data series, not an assumption. (The paper notes this is the
+                    standard Fama–MacBeth-era method, deliberately simple: Kalman filters or Gibbs
+                    samplers would be more efficient but obscure the point.)
+                  </p>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="pipeline__stage">
+                <p class="pipeline__num">3</p>
+                <div>
+                  <h3>Estimate the risk-premium regression</h3>
+                  <p>
+                    One predictive regression of annual market excess returns on the short rate
+                    and $cay$: $y^m_{t+1} - r_t = b_0 + b_r r_t + b_{cay}\,cay_t + \epsilon_{t+1}$.
+                    Its fitted value <em>defines</em> $\lambda_t$. In the sample the premium has
+                    unconditional volatility 2.66% and autocorrelation 0.54 — measurable, moving,
+                    persistent.
+                  </p>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="pipeline__stage">
+                <p class="pipeline__num">4</p>
+                <div>
+                  <h3>Estimate the VAR</h3>
+                  <p>
+                    Stack $X_t = (g_t,\ \beta_t,\ \Delta po_t,\ r_t,\ cay_t,\ \pi_t)'$ and regress
+                    each variable on all six lagged variables — equation (3) is six linear
+                    regressions. Estimated on monthly, overlapping annual-horizon data with
+                    Newey–West (12-lag) standard errors, portfolio by portfolio. The output is
+                    $\hat\mu$, $\hat\Phi$, $\hat\Sigma$: the entire law of motion, with confidence
+                    intervals. The $\alpha$ in $\mu_t = \alpha + r_t + \beta_t\lambda_t$ is set so
+                    the model matches each portfolio's average excess return.
+                  </p>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="pipeline__stage">
+                <p class="pipeline__num">5</p>
+                <div>
+                  <h3>Compute and read off the outputs</h3>
+                  <p>
+                    Plug $(\hat\mu, \hat\Phi, \hat\Sigma)$ and December 2000's $X_t$ into the
+                    recursions of Step 05 → the price (8) and the discount curve $\mu_t(n)$ of
+                    Step 07. Decompose $\mathrm{var}(\mu_t(n))$ through the state variables → what
+                    moves prices, by horizon (Step 09).
+                  </p>
+                </div>
+              </div>
+            </li>
+          </ol>
+
+          <div class="punchline">
+            <p class="punchline__eyebrow">The division of labor</p>
+            <p class="punchline__text">
+              Cash flows and expected returns are estimated by <em>different standard tools</em>
+              (dividend accounting; rolling regressions and a predictive regression), but they are
+              then <em>glued together inside one VAR</em>. That is the answer to "how do you
+              concretely estimate it": each piece is ordinary; the innovation is refusing to keep
+              the pieces in separate drawers. The VAR is where the covariance that pricing
+              requires gets estimated rather than assumed away.
+            </p>
+          </div>
+
+          <div class="note">
+            <p class="note__label">What could go wrong — and does</p>
+            <p>
+              Every input is a statistic, not a fact. Rolling betas are noisy (annual volatility
+              10–19% across portfolios — betas genuinely move). The premium regression's
+              coefficients are imprecise at annual horizons; $cay$'s predictive power weakens
+              without look-ahead. And the VAR's persistence parameters inherit the Stambaugh
+              small-sample bias that the Caveat section takes up. The framework tells you where
+              the fragile links are — which is itself an advantage over a WACC asserted from a
+              table of industry betas.
+            </p>
+          </div>
+        </section>
+
+        <!-- ============ STEP 9 ============ -->
+        <section class="step" id="step-9">
+          <header class="step__header">
+            <p class="eyebrow">Step 09 · The evidence</p>
             <h2>What the paper actually finds</h2>
           </header>
           <p>
@@ -530,12 +745,33 @@
               </figcaption>
             </figure>
           </div>
+
+          <div class="punchline">
+            <p class="punchline__eyebrow">Why this approach turns price-watching into price-explaining</p>
+            <p class="punchline__text">
+              The alternative to this framework is not a different model — it is <em>guessing with
+              structure</em>: pick a WACC from a table, pick a terminal growth rate, run three
+              scenarios, adjust by feel. Every claim about what drives the valuation is then
+              untestable, because nothing in the procedure pins down where a number came from.
+              The joint VAR approach replaces each guess with a measured object and each
+              narrative with an accounting identity. "Rates are low today so growth stocks should
+              be worth more" becomes a computed term structure $E_t[r_{t+j}]$ whose slope depends
+              on estimated persistence. "Uncertainty is high so I add a premium" becomes the
+              sign-disciplined $\frac{1}{2}\mathrm{Var}$ and $-2\,\mathrm{Cov}$ terms. "This stock
+              is riskier" becomes a beta series with measured volatility and persistence. And when
+              the valuation is wrong, you can trace <em>which link</em> failed — premium
+              regression, beta dynamics, or the cash-flow process — instead of re-arguing the
+              whole model over coffee. That is what "understanding empirically what drives
+              prices" means operationally: not better intuition about prices, but a decomposition
+              of price into named, estimated, criticizable parts.
+            </p>
+          </div>
         </section>
 
-        <!-- ============ STEP 9 ============ -->
-        <section class="step" id="step-9">
+        <!-- ============ STEP 10 ============ -->
+        <section class="step" id="step-10">
           <header class="step__header">
-            <p class="eyebrow">Step 09 · The companion paper</p>
+            <p class="eyebrow">Step 10 · The companion paper</p>
             <h2>Ang–Liu (2001): the same idea in accounting clothes</h2>
           </header>
           <p>
