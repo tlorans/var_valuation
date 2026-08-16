@@ -116,10 +116,6 @@
             <div class="eq__body">$$V_t = \sum_{j=1}^{\infty} \frac{E_t[D_{t+j}]}{(1+r)^j}$$</div>
             <span class="eq__tag" aria-hidden="true">(0)</span>
           </div>
-          <p>
-            with a constant WACC $r$, and then a Gordon terminal value $D_{t+1}/(r-g)$ bolted on at
-            the end. Two assumptions are buried inside that innocuous-looking line:
-          </p>
           <div class="term">
             <p class="term__label">Terms · WACC, Gordon growth, and the notation of this course</p>
             <p>
@@ -138,6 +134,10 @@
               knowledge); $\sum$ is summation over $j$.
             </p>
           </div>
+          <p>
+            with a constant WACC $r$, and then a Gordon terminal value $D_{t+1}/(r-g)$ bolted on at
+            the end. Two assumptions are buried inside that innocuous-looking line:
+          </p>
           <div class="duo">
             <div class="card">
               <p class="card__num">1</p>
@@ -288,7 +288,6 @@
             <div class="eq__body">$$X_{t+1} = \mu + \Phi X_t + \Sigma \varepsilon_{t+1}, \qquad \varepsilon_{t+1} \sim N(0, I)$$</div>
             <span class="eq__tag" aria-hidden="true">(3)</span>
           </div>
-          <p>Then assume both quantities are <strong>affine</strong> in the state:</p>
           <div class="term">
             <p class="term__label">Term · affine</p>
             <p>
@@ -304,6 +303,7 @@
               "constant-plus-linear" and nothing is lost.
             </p>
           </div>
+          <p>The model assumes both quantities are <strong>affine</strong> in the state:</p>
           <div class="eq">
             <div class="eq__body">$$g_{t+1} = \delta_0^g + \delta_1^{g\,\prime} X_{t+1}$$</div>
             <span class="eq__tag" aria-hidden="true">(4)</span>
@@ -348,7 +348,6 @@
             the lag count but the <em>linearity + Gaussianity</em>, which buys the closed form at
             the price of no stochastic volatility in the state dynamics.
           </p>
-          <p>Three things this buys you, in one view:</p>
           <div class="term">
             <p class="term__label">Term · mean reversion (and eigenvalues)</p>
             <p>
@@ -363,20 +362,6 @@
               ("persistent"); near 0 = fast forgetting. That single number is why
               "persistence" pervades this course.
             </p>
-          </div>
-          <div class="trio">
-            <div class="card card--tight">
-              <h3>Mean reversion</h3>
-              <p>$E_t[X_{t+j}] = (I + \Phi + \dots + \Phi^{j-1})\mu + \Phi^j X_t$. Expected returns drift back to their unconditional mean at a rate governed by $\Phi$'s eigenvalues. Damodaran's $r$ never moves.</p>
-            </div>
-            <div class="card card--tight">
-              <h3>Correlation</h3>
-              <p>$\Sigma\Sigma'$ off-diagonals let shocks to growth and shocks to discount rates be correlated. Damodaran has no such object.</p>
-            </div>
-            <div class="card card--tight">
-              <h3>Term structure</h3>
-              <p>$\Phi^j$ makes the $j$-horizon forecast differ from the 1-horizon one, for both $g$ and $r$.</p>
-            </div>
           </div>
 
           <figure class="fig">
@@ -398,7 +383,6 @@
           <p>
             Since $X$ is Gaussian and $g, r$ are affine in $X$, the sum
             $S_j \equiv \sum_{i=1}^j (g_{t+i} - r_{t+i})$ is <strong>conditionally normal</strong>.
-            For a normal variable, $E[e^S] = \exp\left(E[S] + \tfrac{1}{2}\mathrm{Var}[S]\right)$. So:
           </p>
           <div class="term">
             <p class="term__label">Term · conditionally normal / lognormal</p>
@@ -431,15 +415,20 @@
               <em>plus</em> in value, before risk pricing kicks in.
             </p>
           </div>
+          <p>Applying that fact to $S_j$ gives the strip value:</p>
           <div class="eq">
             <div class="eq__body">$$E_t\left[e^{S_j}\right] = \exp\Big( \underbrace{E_t[S_j]}_{\text{Damodaran's part}} + \underbrace{\tfrac{1}{2}\mathrm{Var}_t[S_j]}_{\text{the new part}} \Big)$$</div>
             <span class="eq__tag" aria-hidden="true">(6)</span>
           </div>
           <p>Now expand the variance term:</p>
           <div class="eq">
-            <div class="eq__body">$$\mathrm{Var}_t[S_j] = \mathrm{Var}_t\Big[\textstyle\sum g\Big] + \mathrm{Var}_t\Big[\textstyle\sum r\Big] - 2\,\mathrm{Cov}_t\Big[\textstyle\sum g, \textstyle\sum r\Big]$$</div>
+            <div class="eq__body">$$\mathrm{Var}_t[S_j] = \mathrm{Var}_t\Big[\textstyle\sum_{i=1}^{j} g_{t+i}\Big] + \mathrm{Var}_t\Big[\textstyle\sum_{i=1}^{j} r_{t+i}\Big] - 2\,\mathrm{Cov}_t\Big[\textstyle\sum_{i=1}^{j} g_{t+i},\ \textstyle\sum_{i=1}^{j} r_{t+i}\Big]$$</div>
             <span class="eq__tag" aria-hidden="true">(7)</span>
           </div>
+          <p>
+            (Shorthand below: $\sum g$ and $\sum r$ for those two cumulated sums — sums over
+            horizons, not to be confused with the shock matrix $\Sigma$ of equation (3).)
+          </p>
 
           <div class="punchline">
             <p class="punchline__eyebrow">Read equation (7) carefully — this is the punchline</p>
@@ -504,7 +493,9 @@
           <div class="note">
             <p class="note__label">Honesty about the special case</p>
             <p>
-              The paper's most general expected return is <em>quadratic</em> in the state,
+              The paper's most general expected return is <em>quadratic</em> in the state. (From
+              here on the paper's own symbol $\mu_t$ denotes the one-period expected return —
+              our $r_{t+1}$; the $\mu$ of equation (3) retires from duty.) The general form is
               $\mu_t = \alpha + \xi' X_t + X_t' \Omega X_t$, because a conditional CAPM multiplies
               two stochastic objects: $\mu_t = \alpha + r_t + \beta_t \lambda_t$. When both
               $\beta_t$ and $\lambda_t$ move, the product $\beta_t(b_1' z_t)$ puts a
@@ -572,7 +563,8 @@
           <p>
             The closed-form price is elegant, but practice does valuation in two steps: forecast
             $E_t[D_{t+n}]$ first (from projections or analyst estimates), <em>then</em> discount.
-            Proposition I.1 mixes the two inseparably — you cannot pull a "cash flow forecast" out
+            The closed form of Step 05 (the paper's Proposition I.1) mixes the two inseparably —
+            you cannot pull a "cash flow forecast" out
             of the left-hand side of (1) without also mixing in the whole distribution of discount
             rates. The paper's solution is to keep the practitioner's workflow and change only the
             second step. Instead of one rate, define a whole <strong>term structure of discount
@@ -755,7 +747,7 @@
               10–19% across portfolios — betas genuinely move). The premium regression's
               coefficients are imprecise at annual horizons; $cay$'s predictive power weakens
               without look-ahead. And the VAR's persistence parameters inherit the Stambaugh
-              small-sample bias that the Caveat section takes up. The framework tells you where
+              small-sample bias that the Caveat step takes up. The framework tells you where
               the fragile links are — which is itself an advantage over a WACC asserted from a
               table of industry betas.
             </p>
@@ -979,7 +971,7 @@
             <figure class="fig">
               <div class="fig__chart fig__chart--short" id="figVariance" role="img" aria-label="Chart: share of discount-rate variance from risk-free rate, risk premium and beta, by horizon."></div>
               <figcaption class="fig__caption">
-                <span class="fig__label">Fig. 4</span>
+                <span class="fig__label">Fig. 3</span>
                 Stylized reproduction of the paper's Figure 4 message: at the 1-year horizon the
                 risk premium and short rate dominate the variance of the spot discount rate; the
                 premium's share decays with horizon (it is the least persistent component), while
@@ -1031,8 +1023,23 @@
           <p>
             where $y_t$ is book value, $x_t$ earnings, and the expectation is taken under the
             risk-neutral measure generated by a log-normal pricing kernel with prices of risk
-            $\gamma$. The constant-rate RIM is the special case where the kernel is deterministic
-            — the accounting mirror of Step 01's punchline, and the paper sharpens it:
+            $\gamma$ — both defined just below. The constant-rate RIM is the special case where
+            the kernel is deterministic, the accounting mirror of Step 01's punchline. And the
+            paper sharpens that mirror:
+          </p>
+          <div class="punchline">
+            <p class="punchline__eyebrow">Corollary 2.2, Ang–Liu (2001)</p>
+            <p class="punchline__text">
+              It is not always possible, <em>even with constant interest rates</em>, to capture
+              risk aversion by adding a constant spread to the discount rate. A constant discount
+              factor works only if there is no homoskedastic risk premium ($h\gamma$) and no
+              non-zero-mean state dynamics. The "risk-adjusted WACC" is not a simplification —
+              under moving second moments, it is an error.
+            </p>
+          </div>
+          <p>
+            Two phrases in that corollary — <em>pricing kernel</em> and
+            <em>homoskedastic risk premium</em> — carry the whole argument, so let us open them:
           </p>
           <div class="term">
             <p class="term__label">Term · pricing kernel and risk-neutral measure</p>
@@ -1065,16 +1072,6 @@
               itself move with the state ($\sigma_t\sigma_t' = h + H \cdot X_t$).
             </p>
           </div>
-          <div class="punchline">
-            <p class="punchline__eyebrow">Corollary 2.2, Ang–Liu (2001)</p>
-            <p class="punchline__text">
-              It is not always possible, <em>even with constant interest rates</em>, to capture
-              risk aversion by adding a constant spread to the discount rate. A constant discount
-              factor works only if there is no homoskedastic risk premium ($h\gamma$) and no
-              non-zero-mean state dynamics. The "risk-adjusted WACC" is not a simplification —
-              under moving second moments, it is an error.
-            </p>
-          </div>
           <p>Two results translate directly to valuation practice:</p>
           <div class="duo">
             <div class="card card--tight">
@@ -1083,7 +1080,7 @@
             </div>
             <div class="card card--tight">
               <h3>Price-to-book: persistence raises multiples</h3>
-              <p>With $X_t = (r_t, z_t, g_t)'$ — short rate, abnormal return, growth in book — the P/B ratio is a closed-form non-linear function. Comparative statics: higher profitability and growth raise P/B, and <strong>more persistent profitability or growth raises P/B</strong> — highly mean-reverting firms deserve lower multiples, a quantitative anchor for the "duration" intuition of Step 08.</p>
+              <p>With $X_t = (r_t, z_t, g_t)'$ — short rate, abnormal return, growth in book — the P/B ratio is a closed-form non-linear function. Comparative statics: higher profitability and growth raise P/B, and <strong>more persistent profitability or growth raises P/B</strong> — highly mean-reverting firms deserve lower multiples, a quantitative anchor for the "duration" intuition of Step 10.</p>
             </div>
           </div>
           <div class="note">
@@ -1151,7 +1148,7 @@
             <figure class="fig">
               <div class="fig__chart" id="figTilt" role="img" aria-label="Chart: the mean-reverting expected-return curve versus two flat Damodaran lines, with the undervaluation wedge shaded."></div>
               <figcaption class="fig__caption">
-                <span class="fig__label">Fig. 3</span>
+                <span class="fig__label">Fig. 4</span>
                 High-rate regime: Damodaran discounts every horizon at today's rate (upper flat line).
                 Ang–Liu lets the curve decay to $\bar{r}$. The shaded wedge is pure discount-curve
                 error — and it compounds most at the long horizons that dominate growth-stock value.

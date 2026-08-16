@@ -666,9 +666,9 @@
           val: (isFinite(pdG1) && pdG1 > 0) ? (pd0 / pdG1 - 1) * 100 : NaN,
           note: 'mean reversion alone'
         },
-        { name: 'Growth volatility \u00bdVar(\u03a3g)', val: (channelPD(p, 'g') / pd0 - 1) * 100 },
-        { name: 'Rate volatility \u00bdVar(\u03a3r)', val: (channelPD(p, 'r') / pd0 - 1) * 100 },
-        { name: 'Covariance \u22122Cov(\u03a3g, \u03a3r)', val: (channelPD(p, 'c') / pd0 - 1) * 100 },
+        { name: 'Growth volatility \u00bdVar(\u2211g)', val: (channelPD(p, 'g') / pd0 - 1) * 100 },
+        { name: 'Rate volatility \u00bdVar(\u2211r)', val: (channelPD(p, 'r') / pd0 - 1) * 100 },
+        { name: 'Covariance \u22122Cov(\u2211g, \u2211r)', val: (channelPD(p, 'c') / pd0 - 1) * 100 },
         { name: 'Net: all channels (AL vs flat r\u2081 DCF)', val: (isFinite(pdG1) && pdG1 > 0) ? (pdAL / pdG1 - 1) * 100 : NaN }
       ];
       var maxAbs = 1e-9;
