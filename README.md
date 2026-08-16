@@ -14,7 +14,7 @@ this repo); it is not an authors' site:
 - `valuations-model.pdf` — Ang & Liu (2001), "A General Affine Earnings Valuation
   Model," *Review of Accounting Studies* 6, 397–425
 
-## Course structure (12 steps)
+## Course structure (13 steps)
 
 - **00–06** — the original derivation: Damodaran benchmark → definition of value →
   growth form → VAR → lognormal step → closed-form solution → Gordon as degenerate case
@@ -36,14 +36,21 @@ this repo); it is not an authors' site:
   return-predictability literature, with a predictor-by-predictor survival table
   (dividend yield dropped; short rate, cay, inflation, moving betas kept). The bridge
   territory (Bansal–Yaron 2004, Croce 2014) explains why one state vector can drive
-  both sides; Cochrane 2011 and dividend strips frame the field. Closes with the map
-  as research frontier: new indicators (e.g. Engle et al. 2020 climate-news hedging)
-  enter as new columns of the same VAR
-- **10** — what the paper finds: the December 2000 upward-sloping discount curve, the
+  both sides; Cochrane 2011 and dividend strips frame the field
+- **10** — the frontier, worked: greenness in the VAR. The NLP-greenness literature in
+  three waves (Khan–Serafeim–Yoon 2016 materiality-weighted scores → profitability;
+  Sautner–van Lent–Vilkov–Zhang 2023 ML earnings-call climate exposure with
+  opportunity/physical/regulatory splits; Grewal–Hauptmann–Serafeim 2021, Bingler et
+  al. 2024; Engle et al. 2020 pricing), then the six-step recipe for adding a greenness
+  column to the VAR: build the text series → admission tests on both sides → augment
+  X_t → re-estimate with new fragilities (mixed frequency, short samples, near-unit-root
+  persistence) → extend the affine loadings on both sides → read the new outputs
+  (green-vs-brown term structures, variance shares, decomposed P/D gaps)
+- **11** — what the paper finds: the December 2000 upward-sloping discount curve, the
   perpetuity mis-pricing table (−15.3% mean B/M error, −57.9% worst industry), the
   horizon-dependent variance decomposition, and why the approach turns price-watching
   into price-explaining (each valuation narrative becomes a measured object)
-- **11** — the 2001 companion: residual income + pricing kernel, Corollary 2.2 (a
+- **12** — the 2001 companion: residual income + pricing kernel, Corollary 2.2 (a
   constant discount factor is not always possible even with constant rates), affine
   goodwill, P/B comparative statics, and the Jensen-vs-risk-aversion sign result
 

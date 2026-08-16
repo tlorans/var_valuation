@@ -43,7 +43,7 @@
     <!-- ============ HERO ============ -->
     <section class="hero">
       <div class="hero__inner">
-        <p class="eyebrow eyebrow--blue">Finance · Valuation · A course in twelve steps</p>
+        <p class="eyebrow eyebrow--blue">Finance · Valuation · A course in thirteen steps</p>
         <h1 class="hero__title">How to discount cash flows when expected returns move</h1>
         <p class="hero__sub">
           Ang &amp; Liu (2004), equation by equation — with its 2001 affine companion and the paper's
@@ -71,8 +71,9 @@
           <li><a href="#step-7"><span class="syllabus__num">07</span><span class="syllabus__name">Spot discount rates: the practical bridge</span><span class="syllabus__tag">The paper's core output</span></a></li>
           <li><a href="#step-8"><span class="syllabus__num">08</span><span class="syllabus__name">From theory to numbers: estimation</span><span class="syllabus__tag">The empirical pipeline</span></a></li>
           <li><a href="#step-9"><span class="syllabus__num">09</span><span class="syllabus__name">The mental map: where states come from</span><span class="syllabus__tag">Profitability × predictability</span></a></li>
-          <li><a href="#step-10"><span class="syllabus__num">10</span><span class="syllabus__name">What the paper actually finds</span><span class="syllabus__tag">December 2000 calibration</span></a></li>
-          <li><a href="#step-11"><span class="syllabus__num">11</span><span class="syllabus__name">The 2001 companion: earnings and book value</span><span class="syllabus__tag">Ang–Liu (2001)</span></a></li>
+          <li><a href="#step-10"><span class="syllabus__num">10</span><span class="syllabus__name">Greenness in the VAR</span><span class="syllabus__tag">NLP frontier, worked extension</span></a></li>
+          <li><a href="#step-11"><span class="syllabus__num">11</span><span class="syllabus__name">What the paper actually finds</span><span class="syllabus__tag">December 2000 calibration</span></a></li>
+          <li><a href="#step-12"><span class="syllabus__num">12</span><span class="syllabus__name">The 2001 companion: earnings and book value</span><span class="syllabus__tag">Ang–Liu (2001)</span></a></li>
         </ol>
       </div>
     </section>
@@ -91,8 +92,9 @@
           <a href="#step-7"><span>07</span>Spot discount rates</a>
           <a href="#step-8"><span>08</span>From theory to numbers</a>
           <a href="#step-9"><span>09</span>The mental map</a>
-          <a href="#step-10"><span>10</span>What the paper finds</a>
-          <a href="#step-11"><span>11</span>The 2001 companion</a>
+          <a href="#step-10"><span>10</span>Greenness in the VAR</a>
+          <a href="#step-11"><span>11</span>What the paper finds</a>
+          <a href="#step-12"><span>12</span>The 2001 companion</a>
           <a href="#side-by-side">—</span>Side by side</a>
           <a href="#changes">—</span>Three things that concretely change</a>
           <a href="#caveat">—</span>The honest caveat</a>
@@ -605,7 +607,7 @@
             curve, it can slope up, down, or be humped — and it moves with the economy. Unlike the
             bond curve, it is not directly observable: the paper notes one could in principle back
             it out of dividend-strip derivatives, which barely existed in 2004 (more on that in
-            Step 10's link to Van Binsbergen–Koijen).
+            Step 11's link to Van Binsbergen–Koijen).
           </p>
           <div class="term">
             <p class="term__label">Term · term structure</p>
@@ -740,7 +742,7 @@
                     Plug $(\hat\mu, \hat\Phi, \hat\Sigma)$ and December 2000's $X_t$ into the
                     recursions of Step 05 → the price (8) and the discount curve $\mu_t(n)$ of
                     Step 07. Decompose $\mathrm{var}(\mu_t(n))$ through the state variables → what
-                    moves prices, by horizon (Step 10).
+                    moves prices, by horizon (Step 11).
                   </p>
                 </div>
               </div>
@@ -891,19 +893,196 @@
               way the old ones did: show it predicts cash flows or expected returns in the
               regressions of Step 08, establish its dynamics, and slot it into $X_t$. That is
               precisely how the modern extensions proceed — text-based and news-based indicators
-              of policy and climate risk (in the spirit of Engle, Giglio, Kelly, Lee &amp;
-              Stroebel, 2020), firm-level big-data profitability signals, or heterogeneous
-              climate exposures all enter as new columns of the same VAR. The framework does not
-              compete with those literatures; it is the place where their indicators become
-              prices.
+              of policy and climate risk, firm-level big-data profitability signals, or
+              heterogeneous climate exposures all enter as new columns of the same VAR. The next
+              step works one of these extensions end to end: greenness scores built from
+              corporate text with NLP, and what they do to profitability, discount rates, and
+              covariance inside the VAR. The framework does not compete with those literatures;
+              it is the place where their indicators become prices.
             </p>
           </div>
         </section>
 
-        <!-- ============ STEP 10 ============ -->
+        <!-- ============ STEP 10: THE FRONTIER - GREENNESS IN THE VAR ============ -->
         <section class="step" id="step-10">
           <header class="step__header">
-            <p class="eyebrow">Step 10 · The evidence</p>
+            <p class="eyebrow">Step 10 · The frontier</p>
+            <h2>Greenness in the VAR: a worked extension</h2>
+          </header>
+          <p>
+            Step 09 closed with a promise: new indicators enter the framework as new columns of
+            the same VAR. This step keeps that promise, using the literature the promise was
+            about — the body of work, much of it associated with George Serafeim and
+            co-authors, that measures firms' environmental position from the text of their
+            reports and earnings calls and tests whether it forecasts profitability. It is the
+            single most active frontier for this framework, and it exercises every muscle the
+            course has built: the cash-flow side (does greenness forecast ROE and growth?), the
+            discount-rate side (does it shift expected returns?), and the joint distribution
+            (do green cash-flow shocks arrive with brown discount-rate shocks?).
+          </p>
+
+          <h3 class="subhead">The literature in three waves</h3>
+          <div class="duo">
+            <div class="card card--tight">
+              <h3>Wave 1 · Scores from structured data → profitability</h3>
+              <p>Khan, Serafeim &amp; Yoon (2016, <em>Accounting Review</em>) weight ESG strengths and concerns by <em>financial materiality</em> (the SASB industry maps) and show firms strong on <em>material</em> sustainability items deliver higher future profitability and returns — immaterial items forecast nothing. Kruse, Matisoff &amp; Mayzlin (working paper) find green-revenue shares predict margins and ROE for specialists. The cash-flow link is established, but the measures are hand-built and annual.</p>
+            </div>
+            <div class="card card--tight">
+              <h3>Wave 2 · Scores from text (NLP) → exposure</h3>
+              <p>Sautner, van Lent, Vilkov &amp; Zhang (2023, <em>Journal of Finance</em>) measure firm-level climate exposure from earnings-call transcripts with a machine-learning keyword-discovery algorithm, splitting exposure into <em>opportunity</em>, <em>physical</em>, and <em>regulatory</em> components. Grewal, Hauptmann &amp; Serafeim (2021, <em>J. Business Ethics</em>) apply machine learning to sustainability reports; Bingler et al. (2024, <em>JBF</em>) separate substantive climate talk from "cheap talk." Text scales to thousands of firms at quarterly frequency — this is what makes a VAR state variable feasible.</p>
+            </div>
+            <div class="card card--tight">
+              <h3>Wave 3 · Pricing the measures</h3>
+              <p>Engle, Giglio, Kelly, Lee &amp; Stroebel (2020, <em>RFS</em>) hedge climate-news shocks with portfolios constructed from text-based exposures — the discount-rate side in action. The open question this course's framework answers precisely: these literatures establish that greenness <em>forecasts</em> fundamentals and <em>correlates</em> with returns, but forecasting and correlating are not <em>pricing</em>. Pricing requires the joint distribution — which is what a VAR delivers.</p>
+            </div>
+          </div>
+
+          <h3 class="subhead">How to include it: six steps, same pipeline as Step 08</h3>
+          <ol class="pipeline">
+            <li>
+              <div class="pipeline__stage">
+                <p class="pipeline__num">1</p>
+                <div>
+                  <h3>Build the greenness series from text</h3>
+                  <p>
+                    Follow the Sautner et al. recipe: assemble the corpus (earnings-call
+                    transcripts or 10-Ks), start from seed phrases for climate topics, let a
+                    keyword-discovery algorithm expand them, and compute each firm-period's
+                    score as the share of its sentences the algorithm flags. Split the score
+                    into opportunity, physical, and regulatory components — they will not
+                    enter the VAR with the same signs. Winsorize, standardize, and — critically —
+                    build every dictionary using only data available at each date, so the
+                    series carries no look-ahead.
+                  </p>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="pipeline__stage">
+                <p class="pipeline__num">2</p>
+                <div>
+                  <h3>Run the admission tests: which side does it forecast?</h3>
+                  <p>
+                    Before any VAR, run the panel regressions the literatures above ran:
+                    future ROE and growth on today's greenness (the Khan–Serafeim–Yoon /
+                    Kruse test — cash-flow side), and future returns on greenness (the
+                    Engle et al. test — discount-rate side), with size, book-to-market and
+                    industry controls because greenness is correlated with all three. These
+                    regressions are literally previews of the greenness <em>row</em> and
+                    <em>column</em> of the VAR's $\Phi$: admission is evidence that the
+                    coefficients are non-zero, with standard errors.
+                  </p>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="pipeline__stage">
+                <p class="pipeline__num">3</p>
+                <div>
+                  <h3>Augment the state vector</h3>
+                  <p>
+                    $X_t^{*} = (g_t,\ \beta_t,\ \Delta po_t,\ r_t,\ cay_t,\ \pi_t,\
+                    green_t)'$ — one new column, one new row. The row is greenness's own law
+                    of motion: its persistence (text scores are highly persistent — expect an
+                    autoregressive coefficient well above the premium's 0.54), what forecasts
+                    it (does $cay$? does the short rate?), and its shock correlations with
+                    every other variable — including the growth shock, which is exactly the
+                    covariance the price needs.
+                  </p>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="pipeline__stage">
+                <p class="pipeline__num">4</p>
+                <div>
+                  <h3>Re-estimate the VAR — same machinery, new honesty</h3>
+                  <p>
+                    Row-by-row OLS with Newey–West standard errors, exactly as Step 08. Three
+                    new fragilities must be faced: <strong>mixed frequency</strong> (text
+                    scores are quarterly at best, the classic VAR is monthly — aggregate or
+                    interpolate, and correct the lag count); <strong>short samples</strong>
+                    (earnings-call coverage starts around 2002, versus 1965 for the original
+                    system); and <strong>near-unit-root persistence</strong> of the text
+                    scores, which puts the Stambaugh bias of the Caveat step directly on the
+                    new variable — the bias you now care about most is on the coefficient you
+                    just added.
+                  </p>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="pipeline__stage">
+                <p class="pipeline__num">5</p>
+                <div>
+                  <h3>Extend the affine loadings — both sides</h3>
+                  <p>
+                    Cash-flow side: growth's loadings $\delta_1^g$ now include the response of
+                    $g_{t+1}$ to $green_t$ — the Kruse/Khan–Serafeim–Yoon coefficient,
+                    estimated inside the joint system. Discount-rate side: expected returns
+                    $\mu_t = \alpha + r_t + \beta_t\lambda_t$ can load on greenness too (a
+                    green premium), and if both the premium's <em>level</em> and firms'
+                    <em>exposure</em> to it move, the product puts a quadratic term into the
+                    solution — Step 05's honesty note stops being a footnote and becomes the
+                    live case.
+                  </p>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="pipeline__stage">
+                <p class="pipeline__num">6</p>
+                <div>
+                  <h3>Read the new outputs</h3>
+                  <p>
+                    Everything this course computed now comes <em>by greenness</em>:
+                    term structures of discount rates for green versus brown firms (the
+                    equity analog of what dividend strips measure); the share of
+                    $\mathrm{var}(\mu_t(n))$ attributable to green news at each horizon,
+                    decomposed exactly as Step 11 does for rates, premia, and betas; and
+                    price–dividend ratios whose difference between green and brown portfolios
+                    is a <em>computed</em> number with a named source — growth expectations,
+                    discount rates, or covariance — rather than an argument.
+                  </p>
+                </div>
+              </div>
+            </li>
+          </ol>
+
+          <div class="punchline">
+            <p class="punchline__eyebrow">Why this is the right test bed</p>
+            <p class="punchline__text">
+              The climate-finance literature has produced measures and facts, but facts about
+              forecasting are not prices. A greenness score that predicts ROE raises value
+              through $E_t[\sum g]$; one that tracks a priced risk lowers it through
+              $\mu_t(n)$; and if green cash-flow news arrives when discount rates rise, the
+              $-2\,\mathrm{Cov}$ term takes the difference. Only a joint dynamic model — the
+              one this course built — adds those three channels up without double counting or
+              ignoring any of them. The VAR does not make the greenness question easy; it
+              makes it <em>answerable</em>.
+            </p>
+          </div>
+
+          <div class="note">
+            <p class="note__label">Honest limits of the first attempt</p>
+            <p>
+              Treat the first greenness-augmented VAR as a first stone. Text scores are noisy
+              measures of true exposure (a classification error problem on top of the
+              estimation problem); dictionaries drift as language evolves; samples are short
+              relative to the persistence of the series; and greenness is entangled with
+              industry, so unmodeled heterogeneity can masquerade as dynamics. The right
+              response is not to wait for better data but to report the decomposition with
+              its uncertainty — the framework tells you which of its own numbers are fragile,
+              which is precisely its advantage over a green premium asserted from a
+              regression.
+            </p>
+          </div>
+        </section>
+
+        <!-- ============ STEP 11 ============ -->
+        <section class="step" id="step-11">
+          <header class="step__header">
+            <p class="eyebrow">Step 11 · The evidence</p>
             <h2>What the paper actually finds</h2>
           </header>
           <p>
@@ -1023,10 +1202,10 @@
           </div>
         </section>
 
-        <!-- ============ STEP 11 ============ -->
-        <section class="step" id="step-11">
+        <!-- ============ STEP 12 ============ -->
+        <section class="step" id="step-12">
           <header class="step__header">
-            <p class="eyebrow">Step 11 · The companion paper</p>
+            <p class="eyebrow">Step 12 · The companion paper</p>
             <h2>Ang–Liu (2001): the same idea in accounting clothes</h2>
           </header>
           <p>
@@ -1099,7 +1278,7 @@
             </div>
             <div class="card card--tight">
               <h3>Price-to-book: persistence raises multiples</h3>
-              <p>With $X_t = (r_t, z_t, g_t)'$ — short rate, abnormal return, growth in book — the P/B ratio is a closed-form non-linear function. Comparative statics: higher profitability and growth raise P/B, and <strong>more persistent profitability or growth raises P/B</strong> — highly mean-reverting firms deserve lower multiples, a quantitative anchor for the "duration" intuition of Step 10.</p>
+              <p>With $X_t = (r_t, z_t, g_t)'$ — short rate, abnormal return, growth in book — the P/B ratio is a closed-form non-linear function. Comparative statics: higher profitability and growth raise P/B, and <strong>more persistent profitability or growth raises P/B</strong> — highly mean-reverting firms deserve lower multiples, a quantitative anchor for the "duration" intuition of Step 11.</p>
             </div>
           </div>
           <div class="note">
@@ -1335,6 +1514,7 @@
             <li>Ang, A., &amp; Liu, J. (2001). A General Affine Earnings Valuation Model. <em>Review of Accounting Studies</em>, 6, 397–425. <span class="refs__note">[valuations-model.pdf in this repo]</span></li>
             <li>Ang, A., &amp; Liu, J. (2004). How to Discount Cash Flows with Time-Varying Expected Returns. <em>Journal of Finance</em>, 59(6), 2745–2783. <span class="refs__note">[NBER WP 10042 version: w10042.pdf in this repo]</span></li>
             <li>Bansal, R., &amp; Yaron, A. (2004). Risks for the Long Run: A Potential Resolution of Asset Pricing Puzzles. <em>Journal of Finance</em>, 59(4), 1481–1509.</li>
+            <li>Bingler, J. A., Kraus, M., Leippold, M., &amp; Senni, D. E. (2024). How Cheap Talk in Climate Disclosures Relates to Climate Initiatives, Corporate Emissions, and Reputation Risk. <em>Journal of Banking &amp; Finance</em>, 163, 107109.</li>
             <li>Brennan, M. J. (1997). The Term Structure of Discount Rates. <em>Financial Management</em>, 26, 81–90. <span class="refs__note">[The term-structure-of-discount-rates precedent Ang–Liu generalize]</span></li>
             <li>Campbell, J. Y., &amp; Shiller, R. J. (1988). The Dividend-Price Ratio and Expectations of Future Dividends and Discount Factors. <em>Review of Financial Studies</em>, 1(3), 195–228.</li>
             <li>Cochrane, J. H. (2011). Presidential Address: Discount Rates. <em>Journal of Finance</em>, 66(4), 1047–1108.</li>
@@ -1343,8 +1523,12 @@
             <li>Duffie, D., &amp; Kan, R. (1996). A Yield-Factor Model of Interest Rates. <em>Mathematical Finance</em>, 6(4), 379–406.</li>
             <li>Engle, R. F., Giglio, S., Kelly, B., Lee, H., &amp; Stroebel, J. (2020). Hedging Climate Change News. <em>Review of Financial Studies</em>, 33(3), 1184–1216.</li>
             <li>Fama, E. F., &amp; French, K. R. (2000). Forecasting Profitability and Earnings. <em>Journal of Business</em>, 73(2), 161–175.</li>
+            <li>Grewal, J., Hauptmann, C., &amp; Serafeim, G. (2021). Material Sustainability Information and Stock Price Informativeness. <em>Journal of Business Ethics</em>, 171(3), 513–536.</li>
+            <li>Khan, M., Serafeim, G., &amp; Yoon, A. (2016). Corporate Sustainability: First Evidence on Materiality. <em>The Accounting Review</em>, 91(6), 1697–1724.</li>
+            <li>Kruse, T., Matisoff, D. M., &amp; Mayzlin, A. (2020). Green Revenues, Profitability and Market Valuation. Grantham Research Institute Working Paper 331.</li>
             <li>Lettau, M., &amp; Ludvigson, S. (2001). Consumption, Aggregate Wealth, and Expected Stock Returns. <em>Journal of Finance</em>, 56(3), 815–849. <span class="refs__note">[Source of the cay state variable]</span></li>
             <li>Nissim, D., &amp; Penman, S. H. (2001). Ratio Analysis and Equity Valuation: From Research to Practice. <em>Review of Accounting Studies</em>, 6(1), 109–154.</li>
+            <li>Sautner, Z., van Lent, L., Vilkov, G., &amp; Zhang, R. (2023). Firm-Level Climate Change Exposure. <em>Journal of Finance</em>, 78(3), 1449–1498.</li>
             <li>Stambaugh, R. F. (1999). Predictive Regressions. <em>Journal of Financial Economics</em>, 54(3), 375–421.</li>
             <li>van Binsbergen, J. H., &amp; Koijen, R. S. J. (2017). The Term Structure of Returns: Facts and Theory. <em>Journal of Financial Economics</em>, 124(1), 1–21.</li>
             <li>Vasicek, O. (1977). An Equilibrium Characterization of the Term Structure. <em>Journal of Financial Economics</em>, 5(2), 177–188.</li>
