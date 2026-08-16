@@ -806,6 +806,29 @@ input[type="range"]::-moz-range-thumb {
 }
 .step > p + .subhead, .step .note + .subhead { margin-top: 32px; }
 
+/* ---------- Term notes (pedagogical glosses at first use) ---------- */
+
+.term {
+  margin: 20px 0;
+  padding: 14px 18px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: var(--ring);
+}
+.term__label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-500);
+  margin: 0 0 6px;
+}
+.term p { font-size: 14px; line-height: 1.6; color: var(--ink-600); margin: 0; }
+.term p strong { color: var(--ink); font-weight: 600; }
+.term p em { font-style: italic; }
+.term .katex { font-size: 0.95em; color: var(--ink-600); }
+
 /* ---------- Estimation pipeline ---------- */
 
 .pipeline {

@@ -120,6 +120,24 @@
             with a constant WACC $r$, and then a Gordon terminal value $D_{t+1}/(r-g)$ bolted on at
             the end. Two assumptions are buried inside that innocuous-looking line:
           </p>
+          <div class="term">
+            <p class="term__label">Terms · WACC, Gordon growth, and the notation of this course</p>
+            <p>
+              <strong>WACC</strong> — weighted average cost of capital: the blended required
+              return of a firm's investors (cost of equity and after-tax cost of debt, weighted
+              by their shares of the capital structure). In a DCF it plays "the" discount rate
+              applied to every future cash flow.
+              <strong>Gordon growth model</strong> — the formula $D_{t+1}/(r - g)$: if cash
+              flows start at $D_{t+1}$ and grow at a constant rate $g$ forever, discounted at a
+              constant rate $r &gt; g$, the infinite sum collapses to that single ratio. It is
+              where DCF spreadsheets get their terminal value, and — remember this formula —
+              Step 06 shows it is a special case of the general model.
+              <strong>Notation:</strong> $D_{t+j}$ is the cash flow (dividend) $j$ periods
+              ahead; $E_t[\cdot]$ means "average over the possible outcomes, using only
+              information available at time $t$" (the $t$ subscript is the timing of
+              knowledge); $\sum$ is summation over $j$.
+            </p>
+          </div>
           <div class="duo">
             <div class="card">
               <p class="card__num">1</p>
@@ -271,6 +289,21 @@
             <span class="eq__tag" aria-hidden="true">(3)</span>
           </div>
           <p>Then assume both quantities are <strong>affine</strong> in the state:</p>
+          <div class="term">
+            <p class="term__label">Term · affine</p>
+            <p>
+              "Affine" sounds formidable; it means <strong>"a constant plus a linear
+              function."</strong> That is all. A function is affine in $X$ if it equals
+              $a + b'X$ — some fixed number $a$, plus each element of $X$ multiplied by its own
+              coefficient. Growth being "affine in the state" simply says: expected growth =
+              a baseline $\delta_0^g$, plus adjustments $\delta_1^g$ for wherever the economy
+              currently is. No powers, no products of variables, no curves — a straight
+              (hyper)plane. The word matters because it names the whole model class: if prices
+              are exponentials of affine things, everything stays computable in closed form.
+              Whenever you read "affine" in this course, mentally substitute
+              "constant-plus-linear" and nothing is lost.
+            </p>
+          </div>
           <div class="eq">
             <div class="eq__body">$$g_{t+1} = \delta_0^g + \delta_1^{g\,\prime} X_{t+1}$$</div>
             <span class="eq__tag" aria-hidden="true">(4)</span>
@@ -316,6 +349,21 @@
             the price of no stochastic volatility in the state dynamics.
           </p>
           <p>Three things this buys you, in one view:</p>
+          <div class="term">
+            <p class="term__label">Term · mean reversion (and eigenvalues)</p>
+            <p>
+              A variable <em>mean-reverts</em> if, when it sits above its long-run average, it
+              tends to fall back toward it (and vice versa) — like a rubber band. In the VAR,
+              the speed of the snap-back is governed by the <strong>eigenvalues</strong> of
+              $\Phi$. An eigenvalue is just a number summarizing how much a matrix shrinks
+              (or stretches) certain directions of the state. If all eigenvalues are between
+              −1 and 1, the system is stable and today's conditions fade geometrically; an
+              eigenvalue of 0.9 means a deviation is still 90% alive after one period, and
+              $0.9^{10} \approx 35\%$ alive after ten. Eigenvalues near 1 = long memory
+              ("persistent"); near 0 = fast forgetting. That single number is why
+              "persistence" pervades this course.
+            </p>
+          </div>
           <div class="trio">
             <div class="card card--tight">
               <h3>Mean reversion</h3>
@@ -352,6 +400,37 @@
             $S_j \equiv \sum_{i=1}^j (g_{t+i} - r_{t+i})$ is <strong>conditionally normal</strong>.
             For a normal variable, $E[e^S] = \exp\left(E[S] + \tfrac{1}{2}\mathrm{Var}[S]\right)$. So:
           </p>
+          <div class="term">
+            <p class="term__label">Term · conditionally normal / lognormal</p>
+            <p>
+              <em>Conditionally</em> normal means: <strong>given what we know today</strong>
+              ($X_t$), the uncertain quantity is normally distributed — its mean and variance
+              depend on today's state, but its <em>shape</em> is the familiar bell curve.
+              Why does that help? Because sums of normal things are normal, and the whole
+              horizon-$j$ object $S_j$ inherits it. The step from there to a price uses the
+              one fact worth memorizing from this course: if $S$ is normal, then
+              $e^S$ is <em>lognormal</em> — always positive, right-skewed — and its
+              <em>average</em> is not $e^{E[S]}$ but
+              $E[e^S] = e^{E[S] + \frac{1}{2}\mathrm{Var}(S)}$. The average of the exponential
+              beats the exponential of the average, and the gap grows with variance. That gap
+              <em>is</em> the "new part" in equation (6): uncertainty itself moves the price.
+            </p>
+          </div>
+          <div class="term">
+            <p class="term__label">Term · Jensen's inequality (convexity)</p>
+            <p>
+              Why does uncertainty raise value here? Because the pricing function
+              $S \mapsto e^S$ is <strong>convex</strong> — it curves upward. Jensen's
+              inequality is the formal statement: <strong>the average of a curved function
+              exceeds the function at the average</strong> ($E[f(S)] \geq f(E[S])$ when $f$
+              curves up). Concrete version: your stock is worth 110 if things go well, 90 if
+              badly (average 100); the payoff $e^S$ on those states averages more than the
+              payoff at the average state. Upside gains outweigh symmetric downside losses.
+              This is the same mathematics that makes bond <em>convexity</em> and option
+              <em>time value</em> positive — here it makes cash-flow uncertainty a
+              <em>plus</em> in value, before risk pricing kicks in.
+            </p>
+          </div>
           <div class="eq">
             <div class="eq__body">$$E_t\left[e^{S_j}\right] = \exp\Big( \underbrace{E_t[S_j]}_{\text{Damodaran's part}} + \underbrace{\tfrac{1}{2}\mathrm{Var}_t[S_j]}_{\text{the new part}} \Big)$$</div>
             <span class="eq__tag" aria-hidden="true">(6)</span>
@@ -449,6 +528,15 @@
               <strong>exact within the lognormal-affine class</strong> — which is why it doesn't break
               for high-growth or extreme-multiple firms the way Campbell–Shiller does.
             </p>
+            <p>
+              <em>What is a log-linearization?</em> Campbell–Shiller's classic framework needs the
+              (curved, non-linear) relation between prices, dividends and returns to become a
+              straight line, so they <em>approximate</em> it by a first-order Taylor expansion
+              around a point — accurate near that point, drifting when prices or growth are far
+              from "typical" (exactly the growth-stock case). Ang–Liu work in logs from the
+              start, where the same relations are <em>exactly</em> linear, so no approximation
+              is ever taken: the closed form below is exact, not a local approximation.
+            </p>
           </div>
         </section>
 
@@ -509,8 +597,22 @@
             curve, it can slope up, down, or be humped — and it moves with the economy. Unlike the
             bond curve, it is not directly observable: the paper notes one could in principle back
             it out of dividend-strip derivatives, which barely existed in 2004 (more on that in
-            Step 08's link to Van Binsbergen–Koijen).
+            Step 10's link to Van Binsbergen–Koijen).
           </p>
+          <div class="term">
+            <p class="term__label">Term · term structure</p>
+            <p>
+              A <strong>term structure</strong> is just "the whole set of rates, one per
+              horizon, drawn as a curve." You already know it from bonds: the yield curve
+              plots the interest rate for 1-year, 2-year, … 30-year lending. The phrase
+              "term structure of discount rates" imports exactly that picture to equity:
+              instead of one WACC for all horizons, there is a rate for cash arriving in
+              year 1, another for year 2, and so on — and the <em>shape</em> of that curve
+              (upward, downward, humped) is economically informative, exactly as a steep
+              vs inverted yield curve is. "n" throughout this section is the horizon
+              ("maturity"/"term") each rate applies to.
+            </p>
+          </div>
           <div class="note">
             <p class="note__label">Why this is the paper's most practical idea</p>
             <p>
@@ -537,6 +639,19 @@
             remarkable fact is that <strong>nothing in it is exotic</strong>: every stage is a
             first-year-graduate econometrics exercise.
           </p>
+          <div class="term">
+            <p class="term__label">Term · Newey–West (and why overlapping data needs it)</p>
+            <p>
+              The paper measures <em>annual</em> growth using <em>monthly</em> data. Consequence:
+              each observation shares 11 of its 12 months with the next one — adjacent errors
+              are mechanically correlated ("overlapping"). Ordinary standard errors assume
+              independent errors and would overstate confidence. <strong>Newey–West standard
+              errors</strong> are the standard correction: they estimate the covariance of the
+              errors over a window of lags (12 here, one per overlapping month) and inflate
+              the uncertainty accordingly. Read "Newey–West (12 lags)" as: "standard errors
+              honest about the overlap."
+            </p>
+          </div>
 
           <ol class="pipeline">
             <li>
@@ -919,6 +1034,37 @@
             $\gamma$. The constant-rate RIM is the special case where the kernel is deterministic
             — the accounting mirror of Step 01's punchline, and the paper sharpens it:
           </p>
+          <div class="term">
+            <p class="term__label">Term · pricing kernel and risk-neutral measure</p>
+            <p>
+              A <strong>pricing kernel</strong> (or stochastic discount factor) is a single
+              random variable $m$ that prices <em>everything</em>: every price is an expected
+              product, $P = E[m \times \text{payoff}]$. It exists under no-arbitrage alone —
+              no theory of risk needed yet. Where does risk enter? Bad states (recessions) get
+              high $m$: payoffs landing there are worth relatively more, so assets that pay
+              poorly in bad states must be cheap — that is risk pricing. The <strong>
+              risk-neutral measure</strong> is a bookkeeping trick built on it: instead of
+              weighting payoffs by $m$, distort the probabilities so that pricing becomes
+              "expected payoff under new probabilities, discounted at the risk-free rate."
+              Same arithmetic, friendlier format — $E^Q$ in the formula above is exactly that
+              distortion. "Prices of risk" $\gamma$ measure how hard the probabilities are
+              distorted per unit of each shock.
+            </p>
+          </div>
+          <div class="term">
+            <p class="term__label">Term · heteroskedasticity</p>
+            <p>
+              A series is <strong>homoskedastic</strong> if its volatility is constant over
+              time, and <strong>heteroskedastic</strong> if volatility itself moves — calm
+              quarters, wild quarters. (Homo = same; hetero = different; skedaston =
+              scatter/variance.) Equity returns, interest rates, and firms' earnings are
+              visibly heteroskedastic: volatility clusters. This matters twice in the 2001
+              paper: moving volatility is a reason the risk premium must be
+              <em>state-dependent</em> (a constant spread cannot represent it — Corollary
+              2.2), and it is why the affine dynamics there let the conditional covariance
+              itself move with the state ($\sigma_t\sigma_t' = h + H \cdot X_t$).
+            </p>
+          </div>
           <div class="punchline">
             <p class="punchline__eyebrow">Corollary 2.2, Ang–Liu (2001)</p>
             <p class="punchline__text">
