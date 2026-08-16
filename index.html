@@ -43,7 +43,7 @@
     <!-- ============ HERO ============ -->
     <section class="hero">
       <div class="hero__inner">
-        <p class="eyebrow eyebrow--blue">Finance · Valuation · A course in eleven steps</p>
+        <p class="eyebrow eyebrow--blue">Finance · Valuation · A course in twelve steps</p>
         <h1 class="hero__title">How to discount cash flows when expected returns move</h1>
         <p class="hero__sub">
           Ang &amp; Liu (2004), equation by equation — with its 2001 affine companion and the paper's
@@ -70,8 +70,9 @@
           <li><a href="#step-6"><span class="syllabus__num">06</span><span class="syllabus__name">What replaces the terminal value</span><span class="syllabus__tag">Gordon as a special case</span></a></li>
           <li><a href="#step-7"><span class="syllabus__num">07</span><span class="syllabus__name">Spot discount rates: the practical bridge</span><span class="syllabus__tag">The paper's core output</span></a></li>
           <li><a href="#step-8"><span class="syllabus__num">08</span><span class="syllabus__name">From theory to numbers: estimation</span><span class="syllabus__tag">The empirical pipeline</span></a></li>
-          <li><a href="#step-9"><span class="syllabus__num">09</span><span class="syllabus__name">What the paper actually finds</span><span class="syllabus__tag">December 2000 calibration</span></a></li>
-          <li><a href="#step-10"><span class="syllabus__num">10</span><span class="syllabus__name">The 2001 companion: earnings and book value</span><span class="syllabus__tag">Ang–Liu (2001)</span></a></li>
+          <li><a href="#step-9"><span class="syllabus__num">09</span><span class="syllabus__name">The mental map: where states come from</span><span class="syllabus__tag">Profitability × predictability</span></a></li>
+          <li><a href="#step-10"><span class="syllabus__num">10</span><span class="syllabus__name">What the paper actually finds</span><span class="syllabus__tag">December 2000 calibration</span></a></li>
+          <li><a href="#step-11"><span class="syllabus__num">11</span><span class="syllabus__name">The 2001 companion: earnings and book value</span><span class="syllabus__tag">Ang–Liu (2001)</span></a></li>
         </ol>
       </div>
     </section>
@@ -89,8 +90,9 @@
           <a href="#step-6"><span>06</span>What replaces the terminal value</a>
           <a href="#step-7"><span>07</span>Spot discount rates</a>
           <a href="#step-8"><span>08</span>From theory to numbers</a>
-          <a href="#step-9"><span>09</span>What the paper finds</a>
-          <a href="#step-10"><span>10</span>The 2001 companion</a>
+          <a href="#step-9"><span>09</span>The mental map</a>
+          <a href="#step-10"><span>10</span>What the paper finds</a>
+          <a href="#step-11"><span>11</span>The 2001 companion</a>
           <a href="#side-by-side">—</span>Side by side</a>
           <a href="#changes">—</span>Three things that concretely change</a>
           <a href="#caveat">—</span>The honest caveat</a>
@@ -612,7 +614,7 @@
                     Plug $(\hat\mu, \hat\Phi, \hat\Sigma)$ and December 2000's $X_t$ into the
                     recursions of Step 05 → the price (8) and the discount curve $\mu_t(n)$ of
                     Step 07. Decompose $\mathrm{var}(\mu_t(n))$ through the state variables → what
-                    moves prices, by horizon (Step 09).
+                    moves prices, by horizon (Step 10).
                   </p>
                 </div>
               </div>
@@ -645,10 +647,137 @@
           </div>
         </section>
 
-        <!-- ============ STEP 9 ============ -->
+        <!-- ============ STEP 9: THE MENTAL MAP ============ -->
         <section class="step" id="step-9">
           <header class="step__header">
-            <p class="eyebrow">Step 09 · The evidence</p>
+            <p class="eyebrow">Step 09 · The field</p>
+            <h2>The mental map: where the state variables come from</h2>
+          </header>
+          <p>
+            Step 08 showed you <em>how</em> the VAR is estimated; this step places that exercise on
+            the map of the field. The VAR itself is only a frame — a grammar for joint dynamics.
+            Everything interesting about <em>which</em> variables sit in $X_t = (g_t,\ \beta_t,\
+            \Delta po_t,\ r_t,\ cay_t,\ \pi_t)'$ is a judgment call inherited from two
+            neighboring literatures: the literature that links <strong>firm profitability to
+            state variables</strong> (the cash-flow side) and the literature that links
+            <strong>expected returns to state variables</strong> (the discount-rate side). Ang–Liu's
+            contribution is the joint frame; the frame's <em>content</em> comes from these two
+            maps, and any future improvement of the model will come from improving them.
+          </p>
+
+          <h3 class="subhead">Territory 1 — what moves firm profitability (the cash-flow side)</h3>
+          <p>
+            The cash-flow side of the VAR is not an accounting identity — it is the
+            profitability-forecasting literature, whose central findings are decades old and
+            remarkably stable:
+          </p>
+          <div class="duo">
+            <div class="card card--tight">
+              <h3>Profitability mean-reverts — and is forecastable</h3>
+              <p>Fama &amp; French (2000) show that profitability (earnings on book equity) is highly forecastable and mean-reverts toward economy-wide levels over 5–10 years — expected profitability is predicted by fundamentals, and value firms have persistently higher expected profitability than growth firms. This is exactly the AR structure the VAR imposes on $g_t$: persistence $\Phi$, pull $\mu$.</p>
+            </div>
+            <div class="card card--tight">
+              <h3>ROE has internal structure, linked to rates</h3>
+              <p>Nissim &amp; Penman (2001) decompose ROE into margin and turnover, each with its own dynamics and mean reversion — and document that interest rates predict subsequent profitability with a <em>negative</em> sign (rising rates, squeezed margins). The negative $\alpha_1$ of the 2001 companion paper is this finding, built in.</p>
+            </div>
+            <div class="card card--tight">
+              <h3>At the firm level, cash-flow news dominates</h3>
+              <p>Vuolteenaho (2002) decomposes firm-level stock returns and finds cash-flow news, not expected-return news, drives the large majority of firm-level return variance. The joint distribution the VAR prices is first-order for firms — not a refinement.</p>
+            </div>
+            <div class="card card--tight">
+              <h3>Profitability persistence prices into multiples</h3>
+              <p>Ang &amp; Liu (2001) show price-to-book rises with the persistence of profitability and growth — more mean-reverting firms deserve lower multiples. Lee, Myers &amp; Swaminathan (1999) show residual-income values track prices, and that expected-return variation drives much of book-to-market's movement.</p>
+            </div>
+          </div>
+
+          <h3 class="subhead">Territory 2 — what moves expected returns (the discount-rate side)</h3>
+          <p>
+            The discount-rate side is the return-predictability literature — with an honest
+            survivorship story. The classic predictors and their standing circa 2004:
+          </p>
+          <div class="tablewrap">
+            <table class="compare">
+              <thead>
+                <tr>
+                  <th scope="col">Predictor</th>
+                  <th scope="col">Established by</th>
+                  <th scope="col">Standing by 2004</th>
+                  <th scope="col">In the paper's $X_t$?</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Dividend yield</th><td>Campbell &amp; Shiller (1988)</td><td>Weak since the 1990s — Ang &amp; Bekaert (2002), Goyal &amp; Welch (2003)</td><td class="is-strong">No — deliberately excluded</td></tr>
+                <tr><th scope="row">Short rate</th><td>Fama &amp; Schwert (1977)</td><td>Strong at short horizons</td><td class="is-strong">Yes — $r_t$</td></tr>
+                <tr><th scope="row">Term spread</th><td>Campbell (1987)</td><td>Robust for bonds, mixed for equity</td><td>No</td></tr>
+                <tr><th scope="row">Default spread</th><td>Keim &amp; Stambaugh (1986)</td><td>Robust</td><td>No (parsimony)</td></tr>
+                <tr><th scope="row">$cay$</th><td>Lettau &amp; Ludvigson (2001)</td><td>Significant in- and out-of-sample at quarterly frequency</td><td class="is-strong">Yes — $cay_t$</td></tr>
+                <tr><th scope="row">Inflation</th><td>Fama &amp; Schwert (1977)</td><td>Robust negative relation</td><td class="is-strong">Yes — $\pi_t$</td></tr>
+                <tr><th scope="row">Beta dynamics</th><td>Fama &amp; French (1997); Ferson &amp; Harvey (1999)</td><td>Factor loadings move, hard to estimate precisely</td><td class="is-strong">Yes — $\beta_t$ (rolling)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            The map teaches a lesson about method: the paper's state choice is itself an
+            empirical judgment. Dividend yield — the most famous predictor — was <em>dropped</em>
+            because the literature had shown its predictive power collapsed in the 1990s; the
+            short rate and $cay$ were <em>kept</em> because that same literature showed they
+            survive. Selecting $X_t$ is applied predictability research, not free taste.
+          </p>
+
+          <h3 class="subhead">The bridge territory — why joint dynamics have economic content</h3>
+          <p>
+            Two structural literatures explain why the two territories share a border at all —
+            why the same state variables plausibly drive both cash flows and discount rates:
+          </p>
+          <div class="duo">
+            <div class="card card--tight">
+              <h3>Long-run risk</h3>
+              <p>Bansal &amp; Yaron (2004): when growth contains a persistent component and volatility moves, discount rates and cash-flow expectations interact at long horizons — the structural reason the <em>persistence</em> of $g_t$ (not just its mean) belongs in a valuation model.</p>
+            </div>
+            <div class="card card--tight">
+              <h3>Productivity as the common source</h3>
+              <p>Croce (2014): long-run productivity risk simultaneously generates cash-flow dynamics and discount-rate variation in general equilibrium — the deep economic story for why one state vector can legitimately drive both sides of the VAR.</p>
+            </div>
+          </div>
+          <p>
+            Above both territories stands Cochrane's (2011) field-level statement — "discount
+            rate variation is the central organizing question of current asset pricing" — and
+            below them lies the market test: dividend strips (Van Binsbergen &amp; Koijen 2017)
+            measure the very term structure of discount rates this framework computes.
+          </p>
+
+          <div class="punchline">
+            <p class="punchline__eyebrow">How to read the whole field in one sentence</p>
+            <p class="punchline__text">
+              The profitability literature tells you what forecasts $g_t$ (mean-reverting ROE,
+              payout, rates with a negative sign); the predictability literature tells you what
+              forecasts $\mu_t$ (rates, $cay$, moving betas — not dividend yields); the
+              structural literature tells you why the same macro state can drive both; and
+              the VAR is the single frame where those two empirical territories are forced to
+              be consistent with each other — because price requires their joint distribution.
+            </p>
+          </div>
+
+          <div class="note">
+            <p class="note__label">The map is also the research frontier</p>
+            <p>
+              Nothing in the frame is closed. A new candidate state variable enters exactly the
+              way the old ones did: show it predicts cash flows or expected returns in the
+              regressions of Step 08, establish its dynamics, and slot it into $X_t$. That is
+              precisely how the modern extensions proceed — text-based and news-based indicators
+              of policy and climate risk (in the spirit of Engle, Giglio, Kelly, Lee &amp;
+              Stroebel, 2020), firm-level big-data profitability signals, or heterogeneous
+              climate exposures all enter as new columns of the same VAR. The framework does not
+              compete with those literatures; it is the place where their indicators become
+              prices.
+            </p>
+          </div>
+        </section>
+
+        <!-- ============ STEP 10 ============ -->
+        <section class="step" id="step-10">
+          <header class="step__header">
+            <p class="eyebrow">Step 10 · The evidence</p>
             <h2>What the paper actually finds</h2>
           </header>
           <p>
@@ -768,10 +897,10 @@
           </div>
         </section>
 
-        <!-- ============ STEP 10 ============ -->
-        <section class="step" id="step-10">
+        <!-- ============ STEP 11 ============ -->
+        <section class="step" id="step-11">
           <header class="step__header">
-            <p class="eyebrow">Step 10 · The companion paper</p>
+            <p class="eyebrow">Step 11 · The companion paper</p>
             <h2>Ang–Liu (2001): the same idea in accounting clothes</h2>
           </header>
           <p>
@@ -1032,14 +1161,21 @@
           <ol class="refs">
             <li>Ang, A., &amp; Liu, J. (2001). A General Affine Earnings Valuation Model. <em>Review of Accounting Studies</em>, 6, 397–425. <span class="refs__note">[valuations-model.pdf in this repo]</span></li>
             <li>Ang, A., &amp; Liu, J. (2004). How to Discount Cash Flows with Time-Varying Expected Returns. <em>Journal of Finance</em>, 59(6), 2745–2783. <span class="refs__note">[NBER WP 10042 version: w10042.pdf in this repo]</span></li>
-            <li>Brennan, M. J. (1997). Valuation and the Term Structure of Interest Rates. Working paper, UCLA. <span class="refs__note">[The term-structure-of-discount-rates precedent Ang–Liu generalize]</span></li>
+            <li>Bansal, R., &amp; Yaron, A. (2004). Risks for the Long Run: A Potential Resolution of Asset Pricing Puzzles. <em>Journal of Finance</em>, 59(4), 1481–1509.</li>
+            <li>Brennan, M. J. (1997). The Term Structure of Discount Rates. <em>Financial Management</em>, 26, 81–90. <span class="refs__note">[The term-structure-of-discount-rates precedent Ang–Liu generalize]</span></li>
             <li>Campbell, J. Y., &amp; Shiller, R. J. (1988). The Dividend-Price Ratio and Expectations of Future Dividends and Discount Factors. <em>Review of Financial Studies</em>, 1(3), 195–228.</li>
+            <li>Cochrane, J. H. (2011). Presidential Address: Discount Rates. <em>Journal of Finance</em>, 66(4), 1047–1108.</li>
+            <li>Croce, M. M. (2014). Long-Run Productivity Risk: A New Hope for Production-Based Asset Pricing? <em>Journal of Monetary Economics</em>, 66, 13–31.</li>
             <li>Damodaran, A. (2012). <em>Investment Valuation: Tools and Techniques for Determining the Value of Any Asset</em> (3rd ed.). Wiley.</li>
             <li>Duffie, D., &amp; Kan, R. (1996). A Yield-Factor Model of Interest Rates. <em>Mathematical Finance</em>, 6(4), 379–406.</li>
+            <li>Engle, R. F., Giglio, S., Kelly, B., Lee, H., &amp; Stroebel, J. (2020). Hedging Climate Change News. <em>Review of Financial Studies</em>, 33(3), 1184–1216.</li>
+            <li>Fama, E. F., &amp; French, K. R. (2000). Forecasting Profitability and Earnings. <em>Journal of Business</em>, 73(2), 161–175.</li>
             <li>Lettau, M., &amp; Ludvigson, S. (2001). Consumption, Aggregate Wealth, and Expected Stock Returns. <em>Journal of Finance</em>, 56(3), 815–849. <span class="refs__note">[Source of the cay state variable]</span></li>
+            <li>Nissim, D., &amp; Penman, S. H. (2001). Ratio Analysis and Equity Valuation: From Research to Practice. <em>Review of Accounting Studies</em>, 6(1), 109–154.</li>
             <li>Stambaugh, R. F. (1999). Predictive Regressions. <em>Journal of Financial Economics</em>, 54(3), 375–421.</li>
             <li>van Binsbergen, J. H., &amp; Koijen, R. S. J. (2017). The Term Structure of Returns: Facts and Theory. <em>Journal of Financial Economics</em>, 124(1), 1–21.</li>
             <li>Vasicek, O. (1977). An Equilibrium Characterization of the Term Structure. <em>Journal of Financial Economics</em>, 5(2), 177–188.</li>
+            <li>Vuolteenaho, T. (2002). What Drives Firm-Level Stock Returns? <em>Journal of Finance</em>, 57(1), 233–264.</li>
           </ol>
         </section>
 

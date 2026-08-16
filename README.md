@@ -14,7 +14,7 @@ this repo); it is not an authors' site:
 - `valuations-model.pdf` — Ang & Liu (2001), "A General Affine Earnings Valuation
   Model," *Review of Accounting Studies* 6, 397–425
 
-## Course structure (11 steps)
+## Course structure (12 steps)
 
 - **00–06** — the original derivation: Damodaran benchmark → definition of value →
   growth form → VAR → lognormal step → closed-form solution → Gordon as degenerate case
@@ -28,11 +28,22 @@ this repo); it is not an authors' site:
 - **08** — estimation: the five-stage empirical pipeline from raw data to a priced
   discount curve (observables → rolling betas → risk-premium regression → VAR →
   recursions), the division of labor between standard tools, and what can go wrong
-- **09** — what the paper finds: the December 2000 upward-sloping discount curve, the
+- **09** — the mental map: where the state variables come from. Territory 1 links the
+  cash-flow side to the profitability literature (Fama–French 2000 mean reversion,
+  Nissim–Penman 2001 ROE structure and the rates-profitability link, Vuolteenaho 2002
+  firm-level cash-flow dominance, Ang–Liu 2001 / Lee–Myers–Swaminathan 1999
+  persistence-pricing). Territory 2 links the discount-rate side to the
+  return-predictability literature, with a predictor-by-predictor survival table
+  (dividend yield dropped; short rate, cay, inflation, moving betas kept). The bridge
+  territory (Bansal–Yaron 2004, Croce 2014) explains why one state vector can drive
+  both sides; Cochrane 2011 and dividend strips frame the field. Closes with the map
+  as research frontier: new indicators (e.g. Engle et al. 2020 climate-news hedging)
+  enter as new columns of the same VAR
+- **10** — what the paper finds: the December 2000 upward-sloping discount curve, the
   perpetuity mis-pricing table (−15.3% mean B/M error, −57.9% worst industry), the
   horizon-dependent variance decomposition, and why the approach turns price-watching
   into price-explaining (each valuation narrative becomes a measured object)
-- **10** — the 2001 companion: residual income + pricing kernel, Corollary 2.2 (a
+- **11** — the 2001 companion: residual income + pricing kernel, Corollary 2.2 (a
   constant discount factor is not always possible even with constant rates), affine
   goodwill, P/B comparative statics, and the Jensen-vs-risk-aversion sign result
 
