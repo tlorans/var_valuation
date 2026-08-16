@@ -1,9 +1,32 @@
-# var_valuation — Ang–Liu (2004) course page
+# var_valuation — Ang–Liu course page
 
 A static course page explaining **Ang & Liu (2004), "How to Discount Cash Flows with
 Time-Varying Expected Returns," *Journal of Finance* 59(6), 2745–2783** — built up
 equation by equation from the Gordon/Damodaran DCF, with interactive figures and a
-calibration playground.
+calibration playground. Enriched against the two reference PDFs in this repo:
+
+- `w10042.pdf` — the NBER WP 10042 version of the 2004 JF paper
+- `valuations-model.pdf` — Ang & Liu (2001), "A General Affine Earnings Valuation
+  Model," *Review of Accounting Studies* 6, 397–425
+
+## Course structure (10 steps)
+
+- **00–06** — the original derivation: Damodaran benchmark → definition of value →
+  growth form → VAR → lognormal step → closed-form solution → Gordon as degenerate case
+- **07** — spot discount rates μt(n): the paper's practical bridge that keeps the
+  two-step (forecast, then discount) workflow while replacing the single WACC with a curve
+- **08** — what the paper finds: the December 2000 upward-sloping discount curve, the
+  perpetuity mis-pricing table (−15.3% mean B/M error, −57.9% worst industry), and the
+  horizon-dependent variance decomposition (premium dominates short horizons, persistent
+  components dominate long ones), with a stylized Figure-4 reproduction
+- **09** — the 2001 companion: residual income + pricing kernel, Corollary 2.2 (a
+  constant discount factor is not always possible even with constant rates), affine
+  goodwill, P/B comparative statics, and the Jensen-vs-risk-aversion sign result
+
+A note on model class: the course's Steps 05–06 present the exponential-affine solution,
+which is exact when beta or the risk premium is constant; the 2004 paper's full model is
+exponential-quadratic (the β×λ interaction drives an H(n) recursion). Step 05's
+"Honesty about the special case" note makes this explicit.
 
 ## Files
 

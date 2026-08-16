@@ -43,15 +43,16 @@
     <!-- ============ HERO ============ -->
     <section class="hero">
       <div class="hero__inner">
-        <p class="eyebrow eyebrow--blue">Finance · Valuation · A course in seven steps</p>
+        <p class="eyebrow eyebrow--blue">Finance · Valuation · A course in ten steps</p>
         <h1 class="hero__title">How to discount cash flows when expected returns move</h1>
         <p class="hero__sub">
-          Ang &amp; Liu (2004), equation by equation — built up from the Gordon model so you can see
-          exactly where each piece departs from the Damodaran DCF you already know.
+          Ang &amp; Liu (2004), equation by equation — with its 2001 affine companion and the paper's
+          own December 2000 calibration — built up from the Gordon model so you can see exactly
+          where each piece departs from the Damodaran DCF you already know.
         </p>
         <div class="hero__meta">
-          <span class="hero__meta-item"><span class="hero__meta-label">Paper</span>Ang, A. &amp; Liu, J. (2004), <em>Journal of Finance</em> 59(6)</span>
-          <span class="hero__meta-item"><span class="hero__meta-label">Pages</span>2745–2783</span>
+          <span class="hero__meta-item"><span class="hero__meta-label">Papers</span>Ang &amp; Liu (2004), <em>JF</em> 59(6) · Ang &amp; Liu (2001), <em>RAST</em> 6</span>
+          <span class="hero__meta-item"><span class="hero__meta-label">Pages</span>2745–2783 · 397–425</span>
           <span class="hero__meta-item"><span class="hero__meta-label">Prerequisites</span>Gordon growth, expectation algebra, one semester of econometrics</span>
         </div>
         <div class="hero__actions">
@@ -67,6 +68,9 @@
           <li><a href="#step-4"><span class="syllabus__num">04</span><span class="syllabus__name">The lognormal step</span><span class="syllabus__tag">Eqs. (6)–(7)</span></a></li>
           <li><a href="#step-5"><span class="syllabus__num">05</span><span class="syllabus__name">The closed-form solution</span><span class="syllabus__tag">Eqs. (8)–(10)</span></a></li>
           <li><a href="#step-6"><span class="syllabus__num">06</span><span class="syllabus__name">What replaces the terminal value</span><span class="syllabus__tag">Gordon as a special case</span></a></li>
+          <li><a href="#step-7"><span class="syllabus__num">07</span><span class="syllabus__name">Spot discount rates: the practical bridge</span><span class="syllabus__tag">The paper's core output</span></a></li>
+          <li><a href="#step-8"><span class="syllabus__num">08</span><span class="syllabus__name">What the paper actually finds</span><span class="syllabus__tag">December 2000 calibration</span></a></li>
+          <li><a href="#step-9"><span class="syllabus__num">09</span><span class="syllabus__name">The 2001 companion: earnings and book value</span><span class="syllabus__tag">Ang–Liu (2001)</span></a></li>
         </ol>
       </div>
     </section>
@@ -82,6 +86,9 @@
           <a href="#step-4"><span>04</span>The lognormal step</a>
           <a href="#step-5"><span>05</span>The closed-form solution</a>
           <a href="#step-6"><span>06</span>What replaces the terminal value</a>
+          <a href="#step-7"><span>07</span>Spot discount rates</a>
+          <a href="#step-8"><span>08</span>What the paper finds</a>
+          <a href="#step-9"><span>09</span>The 2001 companion</a>
           <a href="#side-by-side">—</span>Side by side</a>
           <a href="#changes">—</span>Three things that concretely change</a>
           <a href="#caveat">—</span>The honest caveat</a>
@@ -186,8 +193,11 @@
             <h2>The VAR: where dynamics enter</h2>
           </header>
           <p>
-            Collect the state variables in $X_t$ (an $N\times 1$ vector — e.g. dividend growth, ROE,
-            book-to-market, a short rate, a spread). Assume a Gaussian VAR(1):
+            Collect the state variables in $X_t$. In the paper's empirical implementation the vector
+            is six-dimensional, $X_t = (g_t,\ \beta_t,\ \Delta po_t,\ r_t,\ cay_t,\ \pi_t)'$ — dividend
+            growth, the time-varying beta, the change in the payout ratio (its earnings-growth
+            proxy), the nominal short rate, Lettau–Ludvigson $cay$, and inflation. Assume a Gaussian
+            VAR(1):
           </p>
           <div class="eq">
             <div class="eq__body">$$X_{t+1} = \mu + \Phi X_t + \Sigma \varepsilon_{t+1}, \qquad \varepsilon_{t+1} \sim N(0, I)$$</div>
@@ -318,6 +328,25 @@
             Duffie–Kan — applied to equity.
           </p>
           <div class="note">
+            <p class="note__label">Honesty about the special case</p>
+            <p>
+              The paper's most general expected return is <em>quadratic</em> in the state,
+              $\mu_t = \alpha + \xi' X_t + X_t' \Omega X_t$, because a conditional CAPM multiplies
+              two stochastic objects: $\mu_t = \alpha + r_t + \beta_t \lambda_t$. When both
+              $\beta_t$ and $\lambda_t$ move, the product $\beta_t(b_1' z_t)$ puts a
+              $K \times K$ matrix $\Omega \neq 0$ into the expected return, and the price picks up
+              an extra recursion $H(n)$, so each strip becomes
+              $\exp\left(a_n + b_n' X_t + X_t' H_n' X_t\right)$ — exponential-<em>quadratic</em>,
+              the equity cousin of the quadratic-Gaussian term-structure models of Constantinides
+              (1992) and Ahn–Dittmar–Gallant (2002). The affine solution above is exact whenever
+              $\Omega = 0$: a constant beta with a time-varying premium, or a time-varying beta
+              with a constant premium — the cases the earlier affine literature (Ang–Liu 2001,
+              Bakshi–Chen 2001, Bekaert–Grenadier 2001) could handle. What none of those models
+              could do is let <em>both</em> move at once. That simultaneity is the 2004 paper's
+              core contribution.
+            </p>
+          </div>
+          <div class="note">
             <p class="note__label">No log-linearization anywhere</p>
             <p>
               The $\tfrac{1}{2}\tilde{b}^{\prime} \Sigma\Sigma^{\prime} \tilde{b}$ term in (10) is the
@@ -349,6 +378,217 @@
             analogue of $r &gt; g$, but now a condition on the <em>dynamics</em> rather than on two
             point estimates.
           </p>
+        </section>
+
+        <!-- ============ STEP 7 ============ -->
+        <section class="step" id="step-7">
+          <header class="step__header">
+            <p class="eyebrow">Step 07 · The bridge to practice</p>
+            <h2>Spot discount rates: keeping the two-step workflow</h2>
+          </header>
+          <p>
+            The closed-form price is elegant, but practice does valuation in two steps: forecast
+            $E_t[D_{t+n}]$ first (from projections or analyst estimates), <em>then</em> discount.
+            Proposition I.1 mixes the two inseparably — you cannot pull a "cash flow forecast" out
+            of the left-hand side of (1) without also mixing in the whole distribution of discount
+            rates. The paper's solution is to keep the practitioner's workflow and change only the
+            second step. Instead of one rate, define a whole <strong>term structure of discount
+            rates</strong> $\{\mu_t(n)\}$, one per maturity, by:
+          </p>
+          <div class="eq">
+            <div class="eq__body">$$E_t\left[\left(\prod_{k=0}^{n-1} e^{-\mu_{t+k}}\right) D_{t+n}\right] \;=\; \frac{E_t[D_{t+n}]}{\exp\left(n \cdot \mu_t(n)\right)}$$</div>
+            <span class="eq__tag" aria-hidden="true">(12)</span>
+          </div>
+          <p>
+            The left side is exactly one term of the pricing sum (1). The right side says: discount
+            the <em>expected</em> cash flow at horizon $n$ at the single horizon-specific rate
+            $\mu_t(n)$ — the "spot expected return." Summing over $n$ recovers the full price.
+            Because the definition equates a distributional object to a point-discounting, each
+            $\mu_t(n)$ internally contains the covariance corrections of Step 4 — the practitioner
+            never sees them, but they are priced in.
+          </p>
+          <p>
+            In the quadratic model, $\mu_t(n) = A(n) + B(n)' X_t + X_t' G(n) X_t$: the discount
+            curve itself is a quadratic function of today's state, computable in closed form, and
+            $\mu_t(n) \to \bar\mu$ as $n \to \infty$ under stationarity. Like the bond yield
+            curve, it can slope up, down, or be humped — and it moves with the economy. Unlike the
+            bond curve, it is not directly observable: the paper notes one could in principle back
+            it out of dividend-strip derivatives, which barely existed in 2004 (more on that in
+            Step 08's link to Van Binsbergen–Koijen).
+          </p>
+          <div class="note">
+            <p class="note__label">Why this is the paper's most practical idea</p>
+            <p>
+              It answers the objection "no manager will estimate a joint VAR of cash flows and
+              expected returns." Nobody has to. Estimate the VAR once (the paper does it on
+              portfolio data); read off the discount curve $\{\mu_t(n)\}$; then discount any
+              separately-forecast cash-flow path, horizon by horizon. The Damodaran workflow
+              survives intact — only the single WACC is replaced by a curve. Brennan (1997) had
+              proposed a term structure of discount rates but required simulation and constant
+              betas; Ang–Liu make it analytic and let beta move.
+            </p>
+          </div>
+        </section>
+
+        <!-- ============ STEP 8 ============ -->
+        <section class="step" id="step-8">
+          <header class="step__header">
+            <p class="eyebrow">Step 08 · The evidence</p>
+            <h2>What the paper actually finds</h2>
+          </header>
+          <p>
+            The empirical implementation estimates the VAR at an annual horizon on monthly,
+            overlapping data (Newey–West corrected) for ten book-to-market portfolios and 46
+            industry portfolios (the Fama–French 49 minus Health, Miscellaneous and Utilities),
+            with betas from 60-month rolling regressions (so the VAR sample
+            runs from 1970, after the beta burn-in, through December 2000). Three results matter
+            for a valuator.
+          </p>
+
+          <div class="finding">
+            <h3><span class="change__num">1</span>The discount curve is steeply upward-sloping when the risk premium is low</h3>
+            <p>
+              At the end of December 2000 — the sample's end, with the market at its peak — the
+              short rate and $cay$ both predicted unusually <em>low</em> market returns. The
+              short end of the discount curve collapsed accordingly; the long end mean-reverted
+              back up. The result is a steeply upward-sloping term structure of discount rates,
+              lying far <em>below</em> the constant rate an unconditional CAPM would have picked.
+              A DCF that used the historical-average WACC at that date was discounting every
+              horizon at a rate far above the model's short-rate-implied one.
+            </p>
+          </div>
+
+          <div class="finding">
+            <h3><span class="change__num">2</span>Mis-pricings of a $1 perpetuity are large — up to −58%</h3>
+            <p>
+              Valuing a perpetuity of $1 per year under each portfolio's discount curve, the paper
+              compares the full model against three wrong models. The traditional constant-rate
+              DDM produces a mean error of <strong>−15.3%</strong> across the ten book-to-market
+              portfolios (worst decile: <strong>−32.0%</strong>) and <strong>−16.9%</strong>
+              across industries (Ships: <strong>−57.9%</strong>, Fabricated products:
+              <strong>−32.9%</strong>). Decomposing the error: ignoring time-variation in the
+              <em>risk premium</em> costs −13.4% on average (B/M) — roughly three times the cost of
+              ignoring time-varying <em>beta</em> (−1.5%). In 2000, getting the premium right
+              mattered far more than getting beta right.
+            </p>
+            <div class="tablewrap">
+              <table class="compare">
+                <thead>
+                  <tr>
+                    <th scope="col">Wrong model (Dec 2000)</th>
+                    <th scope="col">Mean error, 10 B/M portfolios</th>
+                    <th scope="col">Mean error, 46 industries</th>
+                    <th scope="col">Worst single portfolio</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><th scope="row">Constant rate (unconditional CAPM / DDM)</th><td class="is-strong">−15.3%</td><td class="is-strong">−16.9%</td><td>−57.9% (Ships)</td></tr>
+                  <tr><th scope="row">Ignores time-varying beta</th><td>−1.5%</td><td>−4.8%</td><td>−51.8% (Ships)</td></tr>
+                  <tr><th scope="row">Ignores time-varying risk premium</th><td class="is-strong">−13.4%</td><td class="is-strong">−12.7%</td><td>−28.7% (B/M decile 2)</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              (Errors are (wrong − correct)/correct for a $1-per-year perpetuity; negative = the
+              wrong model overvalues. Source: Table 3 of the paper.)
+            </p>
+          </div>
+
+          <div class="finding">
+            <h3><span class="change__num">3</span>What drives discount-rate variation depends on the horizon</h3>
+            <p>
+              A variance decomposition of the spot discount rate $\mu_t(n)$ (Corollary II.2)
+              shows the anatomy. At short horizons the risk premium dominates: at $n = 1$,
+              roughly <strong>65%</strong> of $\mathrm{var}(\mu_t)$ comes from risk-free rates,
+              <strong>72%</strong> from the market risk premium, and only <strong>20%</strong>
+              from beta (neutral portfolio; the decomposition double-counts covariances, so the
+              shares need not sum to 100). But the premium is the least persistent piece
+              (autocorrelation ≈ 0.54, vs ≈ 0.74 for the short rate), so its share decays with
+              horizon while the persistent pieces — the short rate, and beta for value stocks —
+              take over at long maturities. Cash-flow variables contribute almost nothing to
+              discount-rate variation at any horizon.
+            </p>
+            <p>
+              The intuition is one line of algebra. Write
+              $\mu_t = r_t + \beta_t\lambda_t$, decompose around means, and drop the interaction:
+              $\mathrm{var}(\mu_t) \approx \mathrm{var}(r_t) + \bar\beta^2\,\mathrm{var}(\lambda_t) + \bar\lambda^2\,\mathrm{var}(\beta_t)$.
+              The short rate enters one-for-one; the premium is scaled by $\bar\beta \approx 1$;
+              beta's variance is scaled by the average <em>log</em> premium $\bar\lambda \approx 5\%$,
+              which crushes its weight — unless, as for value stocks, $\mathrm{var}(\beta_t)$ is
+              big enough to break through.
+            </p>
+            <figure class="fig">
+              <div class="fig__chart fig__chart--short" id="figVariance" role="img" aria-label="Chart: share of discount-rate variance from risk-free rate, risk premium and beta, by horizon."></div>
+              <figcaption class="fig__caption">
+                <span class="fig__label">Fig. 4</span>
+                Stylized reproduction of the paper's Figure 4 message: at the 1-year horizon the
+                risk premium and short rate dominate the variance of the spot discount rate; the
+                premium's share decays with horizon (it is the least persistent component), while
+                the persistent components — the short rate, and value-stock beta — dominate long
+                maturities. Value stocks' more persistent betas (autocorr. 0.86 vs 0.76) also give
+                their discount-rate volatility a pronounced hump peaking near year 13.
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <!-- ============ STEP 9 ============ -->
+        <section class="step" id="step-9">
+          <header class="step__header">
+            <p class="eyebrow">Step 09 · The companion paper</p>
+            <h2>Ang–Liu (2001): the same idea in accounting clothes</h2>
+          </header>
+          <p>
+            The repo's second paper — <em>A General Affine Earnings Valuation Model</em>,
+            Review of Accounting Studies — runs the same logic through the residual income model
+            (RIM) instead of the dividend model, and it is worth seeing both because they fail in
+            beautifully symmetric ways. Value is book value plus discounted abnormal earnings,
+          </p>
+          <div class="eq">
+            <div class="eq__body">$$S_t = y_t + \sum_{i=1}^{\infty} E_t^Q\left[\left(\prod_{j=0}^{i-1} e^{-r_{t+j}}\right) xa_{t+i}\right], \qquad xa_t = x_t - \left(e^{r_{t-1}} - 1\right)y_{t-1}$$</div>
+            <span class="eq__tag" aria-hidden="true">(13)</span>
+          </div>
+          <p>
+            where $y_t$ is book value, $x_t$ earnings, and the expectation is taken under the
+            risk-neutral measure generated by a log-normal pricing kernel with prices of risk
+            $\gamma$. The constant-rate RIM is the special case where the kernel is deterministic
+            — the accounting mirror of Step 01's punchline, and the paper sharpens it:
+          </p>
+          <div class="punchline">
+            <p class="punchline__eyebrow">Corollary 2.2, Ang–Liu (2001)</p>
+            <p class="punchline__text">
+              It is not always possible, <em>even with constant interest rates</em>, to capture
+              risk aversion by adding a constant spread to the discount rate. A constant discount
+              factor works only if there is no homoskedastic risk premium ($h\gamma$) and no
+              non-zero-mean state dynamics. The "risk-adjusted WACC" is not a simplification —
+              under moving second moments, it is an error.
+            </p>
+          </div>
+          <p>Two results translate directly to valuation practice:</p>
+          <div class="duo">
+            <div class="card card--tight">
+              <h3>Affine goodwill survives stochastic rates</h3>
+              <p>Goodwill $g_t = S_t - y_t = \alpha_t + \beta_t' X_t$ remains affine in accounting variables — but the coefficients are time-varying, loading on the current zero-coupon curve, and under heteroskedasticity the risk premium enters the <em>linear</em> terms (state-dependent premia). Linearity survives only if rates are independent of accounting variables.</p>
+            </div>
+            <div class="card card--tight">
+              <h3>Price-to-book: persistence raises multiples</h3>
+              <p>With $X_t = (r_t, z_t, g_t)'$ — short rate, abnormal return, growth in book — the P/B ratio is a closed-form non-linear function. Comparative statics: higher profitability and growth raise P/B, and <strong>more persistent profitability or growth raises P/B</strong> — highly mean-reverting firms deserve lower multiples, a quantitative anchor for the "duration" intuition of Step 08.</p>
+            </div>
+          </div>
+          <div class="note">
+            <p class="note__label">The Jensen vs. risk-aversion horse race</p>
+            <p>
+              The 2001 paper's most striking comparative static: under risk neutrality, raising
+              <em>any</em> state volatility — even the interest rate's — <em>increases</em>
+              price-to-book, purely through Jensen's inequality (convexity, the $\frac12
+              \mathrm{Var}$ term of Step 04). Volatility only lowers value once it is priced
+              ($\gamma &lt; 0$): in the Intel calibration, growth-in-book volatility lowers P/B
+              because the price of growth risk is large ($\gamma_3 = -13.2$), while interest-rate
+              volatility still raises it because interest-rate risk is essentially unpriced. The
+              Damodaran habit of "adding a risk premium for uncertainty" has a sign problem: for
+              unpriced risk, uncertainty <em>adds</em> value.
+            </p>
+          </div>
         </section>
 
         <!-- ============ SIDE BY SIDE ============ -->
@@ -446,6 +686,19 @@
             as consequential. Use the model to understand the shape of the discount curve and the
             sign of the growth–rate interaction; be skeptical of the third decimal place.
           </p>
+          <p>
+            The authors themselves flag the road ahead: parameter uncertainty in the risk-premium
+          predictability and in estimated betas affects the capital-budgeting problem, and
+          time-varying rates, betas and premiums "can only make potential mis-pricings in these
+          situations even larger." Estimation risk does not shrink the errors — it compounds them.
+          </p>
+          <p>
+            A final caution the papers make explicit: the beta you put <em>into</em> the VAR and
+            the beta the model's implied returns give back out are not automatically the same
+            object (the implied-return beta carries a small Jensen correction), and the model
+            implies a valuation that need not equal the observed market price — the framework
+            prices consistently, it does not guarantee the market agrees.
+          </p>
         </section>
 
         <!-- ============ PLAYGROUND ============ -->
@@ -541,10 +794,13 @@
             <h2>References</h2>
           </header>
           <ol class="refs">
-            <li>Ang, A., &amp; Liu, J. (2004). How to Discount Cash Flows with Time-Varying Expected Returns. <em>Journal of Finance</em>, 59(6), 2745–2783.</li>
+            <li>Ang, A., &amp; Liu, J. (2001). A General Affine Earnings Valuation Model. <em>Review of Accounting Studies</em>, 6, 397–425. <span class="refs__note">[valuations-model.pdf in this repo]</span></li>
+            <li>Ang, A., &amp; Liu, J. (2004). How to Discount Cash Flows with Time-Varying Expected Returns. <em>Journal of Finance</em>, 59(6), 2745–2783. <span class="refs__note">[NBER WP 10042 version: w10042.pdf in this repo]</span></li>
+            <li>Brennan, M. J. (1997). Valuation and the Term Structure of Interest Rates. Working paper, UCLA. <span class="refs__note">[The term-structure-of-discount-rates precedent Ang–Liu generalize]</span></li>
             <li>Campbell, J. Y., &amp; Shiller, R. J. (1988). The Dividend-Price Ratio and Expectations of Future Dividends and Discount Factors. <em>Review of Financial Studies</em>, 1(3), 195–228.</li>
             <li>Damodaran, A. (2012). <em>Investment Valuation: Tools and Techniques for Determining the Value of Any Asset</em> (3rd ed.). Wiley.</li>
             <li>Duffie, D., &amp; Kan, R. (1996). A Yield-Factor Model of Interest Rates. <em>Mathematical Finance</em>, 6(4), 379–406.</li>
+            <li>Lettau, M., &amp; Ludvigson, S. (2001). Consumption, Aggregate Wealth, and Expected Stock Returns. <em>Journal of Finance</em>, 56(3), 815–849. <span class="refs__note">[Source of the cay state variable]</span></li>
             <li>Stambaugh, R. F. (1999). Predictive Regressions. <em>Journal of Financial Economics</em>, 54(3), 375–421.</li>
             <li>van Binsbergen, J. H., &amp; Koijen, R. S. J. (2017). The Term Structure of Returns: Facts and Theory. <em>Journal of Financial Economics</em>, 124(1), 1–21.</li>
             <li>Vasicek, O. (1977). An Equilibrium Characterization of the Term Structure. <em>Journal of Financial Economics</em>, 5(2), 177–188.</li>
@@ -559,7 +815,7 @@
     <div class="footer__inner">
       <div class="footer__col">
         <p class="footer__brand">Ang–Liu / course</p>
-        <p class="footer__text">A teaching page for Ang &amp; Liu (2004), <em>How to Discount Cash Flows with Time-Varying Expected Returns</em>. Built to be read in one sitting.</p>
+        <p class="footer__text">A teaching page for Ang &amp; Liu (2004), <em>How to Discount Cash Flows with Time-Varying Expected Returns</em>, with its companion Ang &amp; Liu (2001), <em>A General Affine Earnings Valuation Model</em>. Both papers live in this repository as PDFs. Built to be read in one sitting.</p>
       </div>
       <div class="footer__col">
         <p class="footer__heading">Source</p>

@@ -450,6 +450,58 @@
   })();
 
   /* ============================================================
+     Fig. 4 — variance decomposition of the spot discount rate
+     (stylized reproduction of the paper's Figure 4 message)
+     ============================================================ */
+
+  (function () {
+    var box = document.getElementById('figVariance');
+    if (!box) return;
+    var H = 30;
+
+    // Approximate variance shares by horizon, mirroring the paper's Figure 4
+    // (neutral-portfolio anatomy: short-horizon premium/rate dominance, long-horizon
+    //  persistence dominance; double-counted covariances, so shares need not sum to 1)
+    function shares(n) {
+      // persistence: premium 0.54, short rate 0.74 (variance-decay factors are squared)
+      var premDecay = Math.exp(-n / 6);   // premium share fades over ~a decade
+      var rateShare = 0.65 * (0.75 + 0.25 * Math.exp(-n / 20));
+      var premShare = 0.72 * premDecay;
+      var betaShare = 0.20 + 0.30 * (1 - Math.exp(-n / 8));
+      return { rate: rateShare, prem: premShare, beta: betaShare };
+    }
+
+    var c = new Chart(box, {
+      w: 720, h: 280,
+      pad: { l: 46, r: 116, t: 16, b: 40 },
+      xmin: 1, xmax: H, ymin: 0, ymax: 0.9,
+      xticks: [1, 5, 10, 15, 20, 25, 30].map(function (v) { return [v, String(v)]; }),
+      yticks: [[0, '0%'], [0.2, '20%'], [0.4, '40%'], [0.6, '60%'], [0.8, '80%']],
+      xtitle: 'horizon n (years)', ytitle: 'share of var(\u03bc)'
+    });
+
+    var series = [
+      { key: 'rate', stroke: '#171717', name: 'risk-free rate' },
+      { key: 'prem', stroke: '#de1d8d', name: 'risk premium' },
+      { key: 'beta', stroke: '#0a72ef', name: 'beta' }
+    ];
+    series.forEach(function (s) {
+      var pts = [];
+      for (var n = 1; n <= H; n++) pts.push([n, shares(n)[s.key]]);
+      c.line(pts, { stroke: s.stroke, width: 2 });
+      // end label
+      var last = pts[pts.length - 1];
+      c.label(H + 0.6, last[1], s.name, { fill: s.stroke, size: 11 });
+    });
+    // 1-year markers for the paper's neutral-portfolio numbers
+    var s1 = shares(1);
+    ['rate', 'prem', 'beta'].forEach(function (k, i) {
+      var color = series[i].stroke;
+      c.dot(1, s1[k], 4, color);
+    });
+  })();
+
+  /* ============================================================
      Playground
      ============================================================ */
 

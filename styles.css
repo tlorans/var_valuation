@@ -586,7 +586,7 @@ input[type="range"]::-moz-range-thumb {
 /* ---------- What-changes ---------- */
 
 .change { margin: 40px 0; }
-.change h3 {
+.change h3, .finding h3 {
   font-size: 20px;
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -595,6 +595,8 @@ input[type="range"]::-moz-range-thumb {
   align-items: baseline;
   gap: 12px;
 }
+.finding { margin: 36px 0; }
+.finding h3 { font-size: 18px; }
 .change__num {
   font-family: var(--font-mono);
   font-size: 12px;
@@ -787,6 +789,11 @@ input[type="range"]::-moz-range-thumb {
   line-height: 1.6;
 }
 .refs em { font-style: italic; }
+.refs__note {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-500);
+}
 
 /* ---------- Footer ---------- */
 
