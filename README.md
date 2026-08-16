@@ -1,11 +1,16 @@
-# var_valuation — Ang–Liu course page
+# Dynamic DCF — course page
 
-A static course page explaining **Ang & Liu (2004), "How to Discount Cash Flows with
-Time-Varying Expected Returns," *Journal of Finance* 59(6), 2745–2783** — built up
-equation by equation from the Gordon/Damodaran DCF, with interactive figures and a
-calibration playground. Enriched against the two reference PDFs in this repo:
+A static course on **discounting cash flows when expected returns move**: why one joint
+model of cash flows and expected returns is required, what a VAR is and why it is the
+right tool, how the model is estimated from data, and what it changes in valuation
+practice — built up equation by equation from the Gordon/Damodaran DCF, with interactive
+figures and a calibration playground.
 
-- `w10042.pdf` — the NBER WP 10042 version of the 2004 JF paper
+The course is an independent teaching resource built around two reference papers (PDFs in
+this repo); it is not an authors' site:
+
+- `w10042.pdf` — Ang & Liu (2004), "How to Discount Cash Flows with Time-Varying
+  Expected Returns," *Journal of Finance* 59(6), 2745–2783 (NBER WP 10042 version)
 - `valuations-model.pdf` — Ang & Liu (2001), "A General Affine Earnings Valuation
   Model," *Review of Accounting Studies* 6, 397–425
 
@@ -40,10 +45,10 @@ exponential-quadratic (the β×λ interaction drives an H(n) recursion). Step 05
 
 | File | Purpose |
 |---|---|
-| `index.html` | The course page (7 steps + comparison + playground + references) |
+| `index.html` | The course: 11 steps + comparison + estimation pipeline + playground + references |
 | `styles.css` | Vercel/Geist design language (shadow-borders, three weights, negative tracking) |
-| `course.js` | KaTeX bootstrapping, scroll-spy, SVG chart engine, playground math |
-| `vercel.json` | Deploy config (clean URLs, cache headers) |
+| `course.js` | KaTeX bootstrap, scroll-spy, SVG chart engine, playground math |
+| `vercel.json` | Deploy config (cache/security headers) |
 
 No build step. Math renders via KaTeX CDN; charts are hand-rolled SVG; the playground
 computes equations (2), (6) and (7) of the course derivation exactly for a scalar
