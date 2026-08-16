@@ -229,11 +229,17 @@
   /* ============================================================
      Scalar Ang–Liu math
      State: expected-return gap, AR(1) with persistence phi.
-       E_t[r_{t+j}]   = rbar + phi^(j-1) (r1 - rbar)
-       Var(Sum r)     = sigma_r^2 * A_j,   A_j = sum_{n=1}^{j-1} L_n^2
-       Cov(Sum g,r)   = rho sigma_g sigma_r * B_j,  B_j = sum_{n=1}^{j-1} L_n
+     Growth side: expected growth is itself AR(1): g_t = gbar + psi^(t-1)(g1 - gbar)
+       (psi = 1 reproduces the classic flat-growth path)
+       E_t[g_{t+j}]     = gbar + psi^(j-1) (g1 - gbar)
+       E_t[Sum_{i<=j} g] = gbar*j + (g1 - gbar) * M_j,  M_j = sum_{n=0}^{j-1} psi^n
+       E_t[r_{t+j}]     = rbar + phi^(j-1) (r1 - rbar)
+       E_t[Sum_{i<=j} r] = rbar*j + (r1 - rbar) * L_j
+       Var(Sum g)       = sigma_g^2 * C_j,   C_j = sum_{n=1}^{j} M_n^2,  M_n = (1-psi^n)/(1-psi)
+       Var(Sum r)       = sigma_r^2 * A_j,   A_j = sum_{n=1}^{j-1} L_n^2
+       Cov(Sum g,r)     = rho sigma_g sigma_r * B_j,  B_j = sum_{n=1}^{j-1} M_n L_n
        L_n = (1 - phi^n) / (1 - phi)   (geometric; = n if phi = 1)
-       Var(S_j) = j sigma_g^2 + A_j sigma_r^2 - 2 rho sigma_g sigma_r B_j
+       Var(S_j) = C_j sigma_g^2 + A_j sigma_r^2 - 2 rho sigma_g sigma_r B_j
        strip_j = exp( E_j + 0.5 Var(S_j) ),  P/D = sum_j strip_j
      ============================================================ */
 
@@ -244,19 +250,29 @@
 
   function model(params, J) {
     var r1 = params.r1, rbar = params.rbar, phi = params.phi;
-    var g = params.g, sg = params.sg, sr = params.sr, rho = params.rho;
+    var g1 = (params.g1 !== undefined) ? params.g1 : params.g;
+    var gbar = params.g;
+    var psi = (params.psi !== undefined) ? params.psi : 0; // default 0 = iid growth (legacy behavior); 1 = random walk
+    var sg = params.sg, sr = params.sr, rho = params.rho;
     J = J || 60;
 
-    var A = [0, 0], B = [0, 0]; // A[j] = Var multiplier of sigma_r^2 at horizon j
-    // Var_t[Sum_{i<=j} r] = sigma_r^2 * sum_{n=1}^{j-1} L_n^2  (shocks e_{t+1}..e_{t+j-1})
-    // Cov_t[Sum g, Sum r]  = rho sigma_g sigma_r * sum_{n=1}^{j-1} L_n
-    var runA = 0, runB = 0;
-    for (var n = 1; n <= J - 1; n++) {
-      var L = geomSum(phi, n);
-      runA += L * L;
-      runB += L;
-      A[n + 1] = runA;
-      B[n + 1] = runB;
+    var A = [0, 0], B = [0, 0], C = [0]; // Var/Cov multipliers at horizon j (index 1 = 0: no shock at j=1)
+    // Rate side:   shock e_{t+n} enters Sum_{i<=j} r with coeff geomSum(phi, j-n)     (n <= j-1)
+    // Growth side: shock u_{t+n} enters Sum_{i<=j} g with coeff geomSum(psi, j-n+1)   (n <= j)
+    // Hence, with m = j-n:
+    //   A_j = Var mult of sigma_r^2 = sum_{m=1}^{j-1} geomSum(phi, m)^2
+    //   C_j = Var mult of sigma_g^2 = sum_{m=1}^{j}   geomSum(psi, m)^2
+    //   B_j = Cov mult              = sum_{m=1}^{j-1} geomSum(psi, m+1) geomSum(phi, m)
+    // psi = 0, g1 = gbar reproduces the iid-growth model exactly (C_j = j, B_j = sum L_m).
+    var runA = 0, runB = 0, runC = 0;
+    for (var m = 1; m <= J; m++) {
+      var Lm = geomSum(phi, m);
+      runC += geomSum(psi, m) * geomSum(psi, m);
+      C[m] = runC;
+      runA += Lm * Lm;
+      runB += geomSum(psi, m + 1) * Lm;
+      A[m + 1] = runA;
+      B[m + 1] = runB;
     }
 
     var strips = [];      // full Ang–Liu strips
@@ -267,8 +283,10 @@
 
     for (var j = 1; j <= J; j++) {
       var Er = rbar + Math.pow(phi, j - 1) * (r1 - rbar);
-      var Ej = j * g - (rbar * j + (r1 - rbar) * geomSum(phi, j));
-      var Vj = j * sg * sg + A[j] * sr * sr - 2 * rho * sg * sr * B[j];
+      var Eg = gbar + Math.pow(psi, j - 1) * (g1 - gbar);
+      var Ej = (gbar * j + (g1 - gbar) * geomSum(psi, j))
+             - (rbar * j + (r1 - rbar) * geomSum(phi, j));
+      var Vj = C[j] * sg * sg + A[j] * sr * sr - 2 * rho * sg * sr * B[j];
       strips.push(Math.exp(Ej + 0.5 * Vj));
       stripsE.push(Math.exp(Ej));
       cum += strips[j - 1];
@@ -280,9 +298,9 @@
 
     // Gordon (log-space) with a constant rate
     function gordonPD(r) {
-      var x = Math.exp(g - r); // per-horizon growth of the strip
+      var x = Math.exp(gbar - r); // per-horizon growth of the strip
       if (x >= 1) return Infinity;
-      var first = Math.exp(g - r);
+      var first = Math.exp(gbar - r);
       return first / (1 - first); // infinite sum, closed form
     }
 
@@ -292,10 +310,12 @@
       stripsE: stripsE,
       cumAL: cumAL,
       cumEonly: cumEonly,
-      A: A, B: B,
+      A: A, B: B, C: C,
       Er: function (j) { return rbar + Math.pow(phi, j - 1) * (r1 - rbar); },
-      Epath: function (j) { return j * g - (rbar * j + (r1 - rbar) * geomSum(phi, j)); },
-      V: function (j) { return j * sg * sg + A[j] * sr * sr - 2 * rho * sg * sr * B[j]; },
+      Eg: function (j) { return gbar + Math.pow(psi, j - 1) * (g1 - gbar); },
+      EgSum: function (j) { return gbar * j + (g1 - gbar) * geomSum(psi, j); },
+      ErSum: function (j) { return rbar * j + (r1 - rbar) * geomSum(phi, j); },
+      V: function (j) { return C[j] * sg * sg + A[j] * sr * sr - 2 * rho * sg * sr * B[j]; },
       gordon: gordonPD,
       pdAL: cumAL[J - 1],
       pdE: cumEonly[J - 1]
@@ -305,13 +325,16 @@
   // P/D with only one variance channel switched on (baseline: E only)
   function channelPD(params, channel, J) {
     var r1 = params.r1, rbar = params.rbar, phi = params.phi;
-    var g = params.g, sg = params.sg, sr = params.sr, rho = params.rho;
+    var g1 = (params.g1 !== undefined) ? params.g1 : params.g;
+    var gbar = params.g, psi = (params.psi !== undefined) ? params.psi : 0;
+    var sg = params.sg, sr = params.sr, rho = params.rho;
     J = J || 60;
     var cum = 0;
     for (var j = 1; j <= J; j++) {
-      var Ej = j * g - (rbar * j + (r1 - rbar) * geomSum(phi, j));
+      var Ej = (gbar * j + (g1 - gbar) * geomSum(psi, j))
+             - (rbar * j + (r1 - rbar) * geomSum(phi, j));
       var adj = 0;
-      if (channel === 'g') adj = 0.5 * j * sg * sg;
+      if (channel === 'g') adj = 0.5 * Cmult(psi, j) * sg * sg;
       if (channel === 'r') adj = 0.5 * AB(params, j).a * sr * sr;
       if (channel === 'c') adj = -rho * sg * sr * AB(params, j).b;
       cum += Math.exp(Ej + adj);
@@ -319,12 +342,21 @@
     return cum;
   }
 
+  // C_j: Var multiplier of sigma_g^2 = sum_{m=1}^{j} geomSum(psi, m)^2
+  function Cmult(psi, j) {
+    var c = 0;
+    for (var m = 1; m <= j; m++) c += Math.pow(geomSum(psi, m), 2);
+    return c;
+  }
+
   function AB(params, j) {
     var phi = params.phi;
+    var psi = (params.psi !== undefined) ? params.psi : 0;
     var a = 0, b = 0;
-    for (var n = 1; n <= j - 1; n++) {
-      var L = geomSum(phi, n);
-      a += L * L; b += L;
+    for (var m = 1; m <= j - 1; m++) {
+      var L = geomSum(phi, m);
+      a += L * L;
+      b += geomSum(psi, m + 1) * L;
     }
     return { a: a, b: b };
   }
@@ -510,7 +542,7 @@
     if (!root) return;
 
     var ids = {
-      r1: 'pg-r1', rbar: 'pg-rbar', phi: 'pg-phi', g: 'pg-g',
+      r1: 'pg-r1', rbar: 'pg-rbar', phi: 'pg-phi', g: 'pg-g', g1: 'pg-g1', psi: 'pg-psi',
       sg: 'pg-sg', sr: 'pg-sr', rho: 'pg-rho'
     };
     var sliders = {}, outs = {};
@@ -526,14 +558,16 @@
     var statErrLabel = document.getElementById('statErrLabel');
     var warn = document.getElementById('pgWarn');
     var curveBox = document.getElementById('pgChartCurve');
+    var growthBox = document.getElementById('pgChartGrowth');
     var stripsBox = document.getElementById('pgChartStrips');
     var decomp = document.getElementById('pgDecomp');
 
     var presets = {
-      high:  { r1: 10,   rbar: 8.5, phi: 0.9,  g: 5,   sg: 6,   sr: 1.5, rho: 0.3 },
-      low:   { r1: 4.5,  rbar: 8.5, phi: 0.9,  g: 5,   sg: 6,   sr: 1.5, rho: 0.3 },
-      gordon:{ r1: 9,    rbar: 9,   phi: 0,    g: 4.5, sg: 0.5, sr: 0.1, rho: 0 },
-      hedge: { r1: 10,   rbar: 8.5, phi: 0.9,  g: 5,   sg: 8,   sr: 2,   rho: -0.6 }
+      high:  { r1: 10,   rbar: 8.5, phi: 0.9,  g: 5,   g1: 5,   psi: 0,   sg: 6,   sr: 1.5, rho: 0.3 },
+      low:   { r1: 4.5,  rbar: 8.5, phi: 0.9,  g: 5,   g1: 5,   psi: 0,   sg: 6,   sr: 1.5, rho: 0.3 },
+      gordon:{ r1: 9,    rbar: 9,   phi: 0,    g: 4.5, g1: 4.5, psi: 0,   sg: 0.5, sr: 0.1, rho: 0 },
+      hedge: { r1: 10,   rbar: 8.5, phi: 0.9,  g: 5,   g1: 5,   psi: 0,   sg: 8,   sr: 2,   rho: -0.6 },
+      fade:  { r1: 10,   rbar: 8.5, phi: 0.9,  g: 4,   g1: 9,   psi: 0.6, sg: 6,   sr: 1.5, rho: 0.3 }
     };
 
     function readParams() {
@@ -542,6 +576,8 @@
         rbar: +sliders.rbar.value / 100,
         phi: +sliders.phi.value,
         g: +sliders.g.value / 100,
+        g1: +sliders.g1.value / 100,
+        psi: +sliders.psi.value,
         sg: +sliders.sg.value / 100,
         sr: +sliders.sr.value / 100,
         rho: +sliders.rho.value
@@ -553,6 +589,8 @@
       outs.rbar.textContent = (+sliders.rbar.value).toFixed(1) + '%';
       outs.phi.textContent = (+sliders.phi.value).toFixed(2);
       outs.g.textContent = (+sliders.g.value).toFixed(1) + '%';
+      outs.g1.textContent = (+sliders.g1.value).toFixed(1) + '%';
+      outs.psi.textContent = (+sliders.psi.value).toFixed(2);
       outs.sg.textContent = (+sliders.sg.value).toFixed(1) + '%';
       outs.sr.textContent = (+sliders.sr.value).toFixed(1) + '%';
       var r = +sliders.rho.value;
@@ -601,6 +639,30 @@
       }
       warn.hidden = warns.length === 0;
       warn.textContent = warns.join(' ');
+
+      // ---- Chart 1b: expected growth path (cash-flow side) ----
+      clearBox(growthBox);
+      var Hg = 40;
+      var gmin = Math.min(p.g, p.g1) * 100 - 0.5;
+      var gmax = Math.max(p.g, p.g1) * 100 + 0.5;
+      var cg = new Chart(growthBox, {
+        w: 720, h: 240,
+        pad: { l: 46, r: 24, t: 14, b: 38 },
+        xmin: 1, xmax: Hg, ymin: gmin, ymax: gmax,
+        xticks: [1, 10, 20, 30, 40].map(function (v) { return [v, String(v)]; }),
+        yticks: niceTicks(gmin, gmax, 4).map(function (t) { return [t[0], t[0].toFixed(1) + '%']; }),
+        xtitle: 'horizon j', ytitle: 'E[g\u209c\u208a\u2c7c]'
+      });
+      var growthPts = [];
+      for (var jg = 1; jg <= Hg; jg++) growthPts.push([jg, m.Eg(jg) * 100]);
+      cg.line([[1, p.g * 100], [Hg, p.g * 100]], { stroke: '#0a72ef', width: 1.5, dash: '4 4' });
+      if (Math.abs(p.psi - 1) > 1e-9 || Math.abs(p.g1 - p.g) > 1e-9) {
+        cg.line([[1, p.g1 * 100], [Hg, p.g1 * 100]], { stroke: '#ff5b4f', width: 1.5, dash: '5 4' });
+        cg.label(Hg - 9.5, p.g1 * 100 + (gmax - gmin) * 0.06, 'g\u2081 forever', { fill: '#ff5b4f', size: 10 });
+      }
+      cg.line(growthPts, { stroke: '#171717', width: 2.25 });
+      cg.label(Hg * 0.28, m.Eg(Math.round(Hg * 0.28)) * 100 - (gmax - gmin) * 0.08, 'Ang\u2013Liu', { fill: '#171717', size: 10 });
+      cg.label(Hg - 9.5, p.g * 100 - (gmax - gmin) * 0.02, 'g\u0304', { fill: '#0a72ef', size: 10 });
 
       // ---- Chart 1: term structure ----
       clearBox(curveBox);

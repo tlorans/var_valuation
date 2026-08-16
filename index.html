@@ -206,6 +206,22 @@
             exponential of cumulated growth-minus-discount-rate. One strip per horizon — exactly the
             objects that trade, in fragmented form, in the dividend-derivatives market.
           </p>
+          <p>
+            Read (2) as two forecasts in one line. The cash-flow side, $E_t[\sum g]$ — what the
+            <em>expected cash flow</em> at each horizon $n$ is, $E_t[D_{t+n}] = D_t\,
+            \exp\!\big(E_t[\textstyle\sum_{i\leq n} g_{t+i}] + \tfrac12
+            \mathrm{Var}_t[\textstyle\sum_{i\leq n} g]\big]$ — is <strong>a modelling object in its
+            own right</strong>, not an input you paste in from a spreadsheet. Nothing in (2) says
+            growth is a constant: the expectation of cumulated growth is whatever the dynamics of
+            $g_t$ deliver, horizon by horizon, exactly as the expectation of cumulated discount
+            rates is whatever the dynamics of $r_t$ deliver. The paper's point — and this course's
+            Step 03 — is that <strong>both forecasts should come from one joint model</strong>,
+            because the same state variables that move rates (the short rate, $cay$) also forecast
+            cash flows. The growth side of the playground below makes this concrete: expected
+            growth gets its own persistence $\psi$, today's level $g_1$, and its own volatility,
+            and a high $g_1$ that fades back to $\bar g$ prices very differently from a flat line
+            at $g_1$ forever — the cash-flow twin of the discount-curve tilt.
+          </p>
         </section>
 
         <!-- ============ STEP 3 ============ -->
@@ -655,6 +671,9 @@
                     <strong>Cash flow growth $g_t$:</strong> for each portfolio, monthly dividends
                     are backed out of the difference between returns with and without dividends,
                     then summed over 12 months to remove seasonality; $g_t = \log(D_t/D_{t-1})$.
+                    The resulting series is <strong>volatile and forecastable</strong>: dividend
+                    growth volatility is 28% for growth stocks, 19% for value stocks, 21% for the
+                    average industry — several times the volatility of the rate side.
                     <strong>Short rate $r_t$:</strong> the one-year zero-coupon rate.
                     <strong>$cay_t$:</strong> Lettau–Ludvigson's consumption–wealth–labor deviation,
                     re-estimated recursively using only data up to each $t$ — no look-ahead.
@@ -1217,7 +1236,8 @@
           </header>
           <p>
             A stylized two-shock, scalar version of the model — one state (the expected-return gap),
-            AR(1) with persistence φ, correlated with dividend-growth shocks. It computes equations
+            AR(1) with persistence φ, correlated with dividend-growth shocks; expected growth gets
+            its own AR(1) (level $g_1$, persistence ψ). It computes equations
             (2), (6) and (7) exactly for this special case, horizon by horizon, and compares the
             price–dividend ratio with what a Damodaran-style constant-rate DCF would give.
           </p>
@@ -1228,6 +1248,7 @@
               <button class="preset" type="button" data-preset="low" aria-pressed="false">Low-rate regime</button>
               <button class="preset" type="button" data-preset="gordon" aria-pressed="false">Near-Gordon</button>
               <button class="preset" type="button" data-preset="hedge" aria-pressed="false">Growth–rate hedge</button>
+              <button class="preset" type="button" data-preset="fade" aria-pressed="false">Fading growth</button>
             </div>
 
             <div class="playground__grid">
@@ -1245,8 +1266,16 @@
                   <input type="range" id="pg-phi" min="0" max="0.99" step="0.01" value="0.9">
                 </div>
                 <div class="ctl">
-                  <div class="ctl__row"><label for="pg-g">Mean dividend growth, g&#772;</label><output id="pg-g-out">5.0%</output></div>
+                  <div class="ctl__row"><label for="pg-g">Long-run growth, ḡ</label><output id="pg-g-out">5.0%</output></div>
                   <input type="range" id="pg-g" min="0" max="12" step="0.1" value="5">
+                </div>
+                <div class="ctl">
+                  <div class="ctl__row"><label for="pg-g1">Growth today, g<sub>1</sub></label><output id="pg-g1-out">5.0%</output></div>
+                  <input type="range" id="pg-g1" min="0" max="12" step="0.1" value="5">
+                </div>
+                <div class="ctl">
+                  <div class="ctl__row"><label for="pg-psi">Growth persistence, ψ</label><output id="pg-psi-out">0.00</output></div>
+                  <input type="range" id="pg-psi" min="0" max="0.98" step="0.01" value="0">
                 </div>
                 <div class="ctl">
                   <div class="ctl__row"><label for="pg-sg">Growth shock vol, σ<sub>g</sub></label><output id="pg-sg-out">6.0%</output></div>
@@ -1282,6 +1311,7 @@
                     <p class="stat__label" id="statErrLabel">Constant-rate DCF error</p>
                   </div>
                 </div>
+                <div class="playground__chart" id="pgChartGrowth" role="img" aria-label="Chart: expected cash-flow growth path, mean-reverting versus flat-growth benchmarks."></div>
                 <div class="playground__chart" id="pgChartCurve" role="img" aria-label="Chart: expected-return term structure versus flat discount lines."></div>
                 <div class="playground__chart" id="pgChartStrips" role="img" aria-label="Chart: per-horizon strip contributions to the price-dividend ratio."></div>
                 <div class="playground__decomp" id="pgDecomp"></div>
