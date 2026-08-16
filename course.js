@@ -247,14 +247,16 @@
     var g = params.g, sg = params.sg, sr = params.sr, rho = params.rho;
     J = J || 60;
 
-    var A = [0], B = [0]; // index by horizon j (A[0], B[0] unused)
+    var A = [0, 0], B = [0, 0]; // A[j] = Var multiplier of sigma_r^2 at horizon j
+    // Var_t[Sum_{i<=j} r] = sigma_r^2 * sum_{n=1}^{j-1} L_n^2  (shocks e_{t+1}..e_{t+j-1})
+    // Cov_t[Sum g, Sum r]  = rho sigma_g sigma_r * sum_{n=1}^{j-1} L_n
     var runA = 0, runB = 0;
-    for (var n = 1; n <= J; n++) {
+    for (var n = 1; n <= J - 1; n++) {
       var L = geomSum(phi, n);
       runA += L * L;
       runB += L;
-      A[n] = runA;
-      B[n] = runB;
+      A[n + 1] = runA;
+      B[n + 1] = runB;
     }
 
     var strips = [];      // full Ang–Liu strips
